@@ -2,8 +2,11 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { Backdrop } from './components';
 import { supabase } from './supabase';
-import { Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import LayoutAdmin from './layouts/adminlayout';
+import Image from 'next/image';
+import heroimg from '/public/images/hero.jpg'
+import theme from './customization';
 
 export default function HomePage() {
   const router = useRouter();
@@ -31,76 +34,41 @@ export default function HomePage() {
 
   return (
     <LayoutAdmin>
-      <div>
-        <Backdrop isOpenBD={isLoadingLogout} />
-        HomePage
-        <Button onClick={async () => {
-          setisLoadingLogout(true)
-          await supabase.auth.signOut();
-          router.push('/auth/login')
-        }}>
-          Logout
-        </Button>
-        <p>lorem</p>
-        <p>loremasd</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-        <p>lorem</p>
-      </div>
+      <Backdrop isOpenBD={isLoadingLogout} />
+      <Box height={{xs: '500px', sm: '550px', md: '650px'}} sx={{bgcolor: {xs: 'red', sm: 'blue', md: "orange"}, position: 'relative'}}>
+        {/* <Typography variant='subtitle1' sx={{position: 'absolute', left: 30, top: 20}}>/ Dashboard</Typography> */}
+        <Image alt='hero' fill src={heroimg} style={{position: "absolute", boxShadow: '0px 3px 3px gray', objectFit: 'cover'}} />
+        <div style={styles.overlay}></div>
+        <div style={styles.heroContent}>
+          <Typography sx={{mt: 3, fontSize: {xs: '30px', sm: '40px', md: '50px', lg: '70px'}}} color={'white'}>Ligao Laundry</Typography>
+          <Typography sx={{mt: 3, fontSize: {xs: '10px', sm: '15px', md: '20px', lg: '25px'}, whiteSpace: 'normal', textIndent: '1.5em'}} color={'white'}>
+            Welcome to Ligao Laundry, your trusted destination for impeccable cleanliness. Our cutting-edge technology, eco-friendly practices, and expert staff ensure your garments receive the utmost care. Experience convenience, efficiency, and unmatched quality as we redefine the way you think about laundry.
+          </Typography>
+          <Button variant='text' sx={{mt: 3, color: 'white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
+        </div>
+      </Box>
+      <Box component='main' sx={{p: 2, }}>
+        <Box >   
+        </Box>
+      </Box>
     </LayoutAdmin>
   )
+}
+ 
+export const styles = {
+  overlay: {
+    position: 'absolute',
+    zIndex: 3,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    height: '100%',
+    width: '100%', 
+  },
+  heroContent: {
+    zIndex: 5,
+    p: 10,
+    position: 'absolute',
+    top: '15%',
+    left: '10%' ,
+    width: '80%',
+  }
 }

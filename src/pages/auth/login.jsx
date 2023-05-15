@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Backdrop, Snackbar } from "../components";
 import { Formik } from "formik";
 import * as yup from 'yup';
+import Head from "next/head";
 
 export default function Home () { 
   const router = useRouter();
@@ -52,6 +53,9 @@ export default function Home () {
       alignItems="center"
       justifyContent='center' 
     >
+      <Head>
+        <title>Login</title>
+      </Head>
       <Backdrop 
         isOpenBD={isLoading}
       />

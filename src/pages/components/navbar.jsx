@@ -16,7 +16,7 @@ export default function Navbar({width}) {
 
 
     return (
-        <AppBar sx={{width: {xs: '100%', sm: `calc(100% - ${width})`, height: "8vh"} }} >
+        <AppBar sx={{width: {xs: '100%', sm: `calc(100% - ${width})`, height: "60px", justifyContent: 'center'} }} >
             <Toolbar sx={{display: 'flex',}}> 
             <IconButton
                 size="large"
@@ -26,7 +26,7 @@ export default function Navbar({width}) {
             >
                 <Menu htmlColor="white" />
             </IconButton>
-                <Typography color='white'>{page == '/' ? 'DASHBOARD' : page.toLocaleUpperCase()}</Typography>
+                <Typography color='white'>{page == '/' ? 'DASHBOARD' : page.toLocaleUpperCase().slice(1)}</Typography>
             </Toolbar>
         </AppBar> 
     )

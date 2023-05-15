@@ -1,11 +1,12 @@
 import { Drawer, ListItem as ListI, ListItemText, Typography, Divider, Tooltip, ListItemIcon, ListItemButton, ListSubheader, List, Box } from "@mui/material"
 import Image from "next/image"
-import { ChevronLeft, Dashboard } from "@mui/icons-material";
+import { ChevronLeft, Dashboard, Inbox } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import theme from "../customization";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { closeDrawer } from "@/slices/uxSlice";
+import Link from "next/link";
 
 const DrawerComponent = ({width, variant, display}) => {
     const router = useRouter();
@@ -35,6 +36,11 @@ const DrawerComponent = ({width, variant, display}) => {
             path: '/',
             icon: <Dashboard color='inherit' />
         },  
+        {
+            name: 'Inbox',
+            path: '/inbox',
+            icon: <Inbox color="inherit" />
+        }
     ]
     return (
         <Drawer 
@@ -75,14 +81,16 @@ const DrawerComponent = ({width, variant, display}) => {
                 <Divider />
                 {links.map((link) => {
                     return(
-                        <ListItem key={link.path} disablePadding  >
-                            <ListItemButton sx={router.pathname == link.path ? active_link : ''}>
-                                <Tooltip title={link.name} >
-                                    <ListItemIcon sx={{ color: 'inherit'}} >{link.icon}</ListItemIcon>
-                                </Tooltip>
-                                <ListItemText>{link.name}</ListItemText>
-                            </ListItemButton>
-                        </ListItem>
+                        <Link key={link.path} href={link.path} >
+                            <ListItem disablePadding  >
+                                <ListItemButton sx={router.pathname == link.path ? active_link : ''}>
+                                    <Tooltip title={link.name} >
+                                        <ListItemIcon sx={{ color: 'inherit'}} >{link.icon}</ListItemIcon>
+                                    </Tooltip>
+                                    <ListItemText>{link.name}</ListItemText>
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
                     )
                 })} 
     

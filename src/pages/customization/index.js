@@ -12,6 +12,11 @@ const theme = createTheme({
             main: '#00667e', 
             dark: '#002a33',
         }, 
+        Whitecolor: {
+            light: '#FFFFFF',
+            main: '#f6f6f6',
+            dark: '#d0d0d0'
+        }
     }
 });
 
