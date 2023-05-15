@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { Sidenav } from '../components'
 import Navbar from '../components/navbar'
 import DrawerComponent from '../components/drawer';
-import { closeDrawer } from '@/slices/uxSlice';
+import { closeDrawer } from '../slices/uxSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function LayoutAdmin({children}) {
