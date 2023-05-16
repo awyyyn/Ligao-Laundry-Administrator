@@ -1,11 +1,11 @@
 'use client';
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase";
+import { supabase } from "../../supabase";
 import { useRouter } from "next/router";  
-import theme, { PrimaryBTN } from "../customization";
+import theme, { PrimaryBTN } from "../../customization";
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import Image from "next/image";
-import { Backdrop, Snackbar } from "../components";
+import { Backdrop, Snackbar } from "../../components";
 import { Formik } from "formik";
 import * as yup from 'yup';
 import Head from "next/head";

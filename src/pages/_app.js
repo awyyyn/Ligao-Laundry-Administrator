@@ -1,8 +1,8 @@
 import '@/styles/globals.css'; 
 import { ThemeProvider } from '@emotion/react';
-import theme from './customization';
+import theme from '../customization';
 import { Provider } from 'react-redux';
-import store from './store'
+import store from '../store'
 
 export default function App({ Component, pageProps }) {
   

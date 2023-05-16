@@ -1,8 +1,8 @@
 import { AppBar, Box, Grid, Stack, Toolbar, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { Sidenav } from '../components'
-import Navbar from '../components/navbar'
-import DrawerComponent from '../components/drawer';
+import { Sidenav } from '../../components'
+import Navbar from '../../components/navbar'
+import DrawerComponent from '../../components/drawer';
 import { closeDrawer } from '../slices/uxSlice';
 import { useDispatch, useSelector } from 'react-redux';
 

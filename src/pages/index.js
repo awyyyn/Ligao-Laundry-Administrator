@@ -1,12 +1,12 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
-import { Backdrop } from './components';
-import { supabase } from './supabase';
+import { Backdrop } from '@/components';
+import { supabase } from '@/supabase';
 import { Box, Button, Typography } from '@mui/material';
 import LayoutAdmin from './layouts/adminlayout';
 import Image from 'next/image';
 import heroimg from '/public/images/hero.jpg'
-import theme from './customization';
+import theme from '@/customization';
 
 export default function HomePage() {
   const router = useRouter();
@@ -14,8 +14,6 @@ export default function HomePage() {
   const [isLoadingLogout, setisLoadingLogout] = useState(false)
   const [session, setSession] = useState(null);
   const [message, setMessage] = useState('');
-
-  
 
   useEffect(() => { 
     setisLoadingLogout(false);
