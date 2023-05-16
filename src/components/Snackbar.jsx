@@ -1,5 +1,5 @@
 import { Alert, Snackbar as Snack } from "@mui/material";
-import theme from "../customization";
+import theme from "@/customization";
 
 export default function Snackbar({
     message,

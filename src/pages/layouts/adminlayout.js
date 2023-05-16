@@ -1,8 +1,8 @@
 import { AppBar, Box, Grid, Stack, Toolbar, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import {   Navbar } from '../../components' 
-import DrawerComponent from '../../components/drawer';
-import { closeDrawer } from '../../slices/uxSlice';
+import {   Navbar } from '@/components' 
+import DrawerComponent from '@/components/drawer';
+import { closeDrawer } from '@/slices/uxSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
 export default function LayoutAdmin({children}) {

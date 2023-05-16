@@ -2,10 +2,10 @@ import { Drawer, ListItem as ListI, ListItemText, Typography, Divider, Tooltip, 
 import Image from "next/image"
 import { ChevronLeft, Dashboard, Inbox } from "@mui/icons-material";
 import { useRouter } from "next/router";
-import theme from "../customization";
+import theme from "@/customization";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
-import { closeDrawer } from "../slices/uxSlice";
+import { closeDrawer } from "@/slices/uxSlice";
 import Link from "next/link";
 
 const DrawerComponent = ({width, variant, display}) => {

@@ -1,6 +1,6 @@
 import { Backdrop as Backd, CircularProgress } from '@mui/material'
 import React from 'react'
-import theme from '../customization'
+import theme from '@/customization'
 
 export default function Backdrop({isOpenBD}) {
     return (
