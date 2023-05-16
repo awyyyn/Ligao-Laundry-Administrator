@@ -1,4 +1,4 @@
-import uxSlice from "../pages/slices/uxSlice";
+import uxSlice from "../slices/uxSlice";
 import { configureStore } from "@reduxjs/toolkit";
 
 

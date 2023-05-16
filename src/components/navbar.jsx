@@ -3,7 +3,7 @@ import { Menu } from '@mui/icons-material'
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { openDrawer } from "../pages/slices/uxSlice";
+import { openDrawer } from "../slices/uxSlice";
 
 export default function Navbar({width}) {
     const [page, setPage] = useState('');
