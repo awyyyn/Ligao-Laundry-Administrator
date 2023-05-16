@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import theme from "@/customization";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
-import { closeDrawer } from "../slices/uxSlice";
+import { closeDrawer } from "../slices/uxSlice.js";
 import Link from "next/link";
 
 const DrawerComponent = ({width, variant, display}) => {

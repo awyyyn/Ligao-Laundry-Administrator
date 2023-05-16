@@ -1,4 +1,4 @@
-import uxSlice from "../slices/uxSlice";
+import uxSlice from "../slices/uxSlice.js";
 import { configureStore } from "@reduxjs/toolkit";
 
 
@@ -8,4 +8,4 @@ const store = configureStore({
     }
 })
 
-export default store
+export default store;
