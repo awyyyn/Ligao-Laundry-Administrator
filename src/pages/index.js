@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { Backdrop } from '@/components';
@@ -32,10 +33,13 @@ export default function HomePage() {
 
   return (
     <LayoutAdmin>
+      <Head>
+        <title>Home</title>
+      </Head>
       <Backdrop isOpenBD={isLoadingLogout} />
-      <Box height={{xs: '500px', sm: '550px', md: '650px'}} sx={{bgcolor: {xs: 'red', sm: 'blue', md: "orange"}, position: 'relative'}}>
+      <Box height={{xs: '100vh', sm: '100vh', md: '650px'}} width='100%' sx={{ position: 'relative'}}>
         {/* <Typography variant='subtitle1' sx={{position: 'absolute', left: 30, top: 20}}>/ Dashboard</Typography> */}
-        <Image alt='hero' fill src={heroimg} style={{position: "absolute", boxShadow: '0px 3px 3px gray', objectFit: 'cover'}} />
+        <Image alt='hero' priority fill src={heroimg} style={{position: "absolute", boxShadow: '0px 3px 3px gray', objectFit: 'cover'}} />
         <div style={styles.overlay}></div>
         <div style={styles.heroContent}>
           <Typography sx={{mt: 3, fontSize: {xs: '30px', sm: '40px', md: '50px', lg: '70px'}}} color={'white'}>Ligao Laundry</Typography>
@@ -46,7 +50,13 @@ export default function HomePage() {
         </div>
       </Box>
       <Box component='main' sx={{p: 2, }}>
-        <Box >   
+        <Box >   asdasd
+
+
+
+
+
+        asd
         </Box>
       </Box>
     </LayoutAdmin>

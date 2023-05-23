@@ -12,7 +12,7 @@ export default function LayoutAdmin({children}) {
     const dispatch = useDispatch()
 
     return (
-        <Box display='flex' justifyContent=' evenly' >
+        <Box display='flex' justifyContent=' evenly' width='100vw' position='relative' >
             {/* SIDE NAV */}
             <Box 
                 component='div' 
@@ -25,25 +25,24 @@ export default function LayoutAdmin({children}) {
                     backgroundColor: 'rgba(0, 0, 0, 0.3)',  
                     display: {xs: drawerState ? 'block' : 'none', sm: 'none'}
                 }} />
-            <Navbar width={drawerWidth}  />
-
-            <DrawerComponent width={drawerWidth} variant="persistent" display='block' />  
 
 
-            <Grid container >
+            <DrawerComponent width={drawerWidth} variant="persistent" display='block' />   
+
+            <Grid  width='100%'  > 
+                <Grid item xs={12}>
+                    <Navbar width={drawerWidth}  />
+                </Grid>
                 <Grid item sm={2} display={{xs: 'none', sm: 'block', md: 'block'}}>
                     <DrawerComponent width={drawerWidth} variant="permanent" display='none' />  
                 </Grid>
-                <Grid item sm={10} xs={12} mt='60px' ml={{sm: drawerWidth}} sx={{overflowY: 'hidden'}} > 
-                    <Box sx={{width: '100%', overflowY: 'scroll', }} height={'calc(100vh - 60px)'}>
+                <Grid item sm={10} xs={12}  mt='60px' ml={{sm: drawerWidth}} sx={{overflowY: 'hidden'}} onClick={() => dispatch(closeDrawer())}> 
+                    <Box sx={{width: '100%', overflowY: 'auto',  }} height={'calc(100vh - 60px)'}>
                         {children}
                     </Box>
                 </Grid>
             </Grid>
-            {/* <Box width={drawerWidth}>
-            </Box>
-            <Box  ml={drawerWidth}>
-            </Box> */}
+            
         </Box>
     )
 }

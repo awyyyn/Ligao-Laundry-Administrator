@@ -1,6 +1,6 @@
 import { Drawer, ListItem as ListI, ListItemText, Typography, Divider, Tooltip, ListItemIcon, ListItemButton, ListSubheader, List, Box } from "@mui/material"
 import Image from "next/image"
-import { ChevronLeft, Dashboard, Inbox } from "@mui/icons-material";
+import { CheckBox, CheckBoxTwoTone, ChevronLeft, Dashboard, Inbox, LocalLaundryService, Logout } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import theme from "@/customization";
 import styled from "@emotion/styled";
@@ -40,11 +40,20 @@ const DrawerComponent = ({width, variant, display}) => {
             name: 'Inbox',
             path: '/inbox',
             icon: <Inbox color="inherit" />
+        },
+        {
+            name: "Add Laundry",
+            path: 'laundry',
+            icon: <LocalLaundryService />
+        },
+        {
+            name: "Status",
+            path: 'status',
+            icon: <CheckBox />
         }
     ]
     return (
         <Drawer 
-            
             sx={{
                 display: {xs: display, sm: 'block'},
                 '& .MuiDrawer-paper': {
@@ -57,9 +66,9 @@ const DrawerComponent = ({width, variant, display}) => {
             open={variant == 'permanent' ? true : drawerState}
             variant={variant} 
         >
-        <List sx={{display: 'flex', flexDirection: 'column', height: '100%', position: 'relative'}}  >
-                <ListSubheader disableGutters  sx={{/* display: {xs: 'none', sm: 'block'} */}}> 
-                    <ListItemText sx={{fontSize: 30}}>
+            <List sx={{display: 'flex', flexDirection: 'column', height: '100%', position: 'relative'}}  >
+                <ListSubheader disableGutters  sx={{/* display: {xs: 'none', sm: 'block'} */}} > 
+                    <ListItemText sx={{fontSize: 30, }} >
                         <Typography fontSize={30} textAlign='center' fontWeight='bold' color='#00667E'>Ligao Laundry</Typography> 
                     </ListItemText>  
                 </ListSubheader>
@@ -68,11 +77,12 @@ const DrawerComponent = ({width, variant, display}) => {
                 </ListI> */}
                 <Divider />
                 <Divider />
-                <ListI sx={{display: 'flex', justifyContent: 'center', mb: 2  }} > 
+                <ListI  sx={{display: 'flex', justifyContent: 'center', mb: 2  }} > 
                     <Box height={150} width={150} position='relative' >
                         <Image 
-                            style={{borderRadius: 150, boxShadow: `0px 5px 10px ${theme.palette.primary.dark}`}}
+                            style={{position: 'absolute', borderRadius: 150, boxShadow: `0px 2px 5px ${theme.palette.primary.dark}`}}
                             fill
+                            priority
                             alt="logo"
                             src='/images/icon.png'
                         />
@@ -82,8 +92,8 @@ const DrawerComponent = ({width, variant, display}) => {
                 {links.map((link) => {
                     return(
                         <Link key={link.path} href={link.path} >
-                            <ListItem disablePadding  >
-                                <ListItemButton sx={router.pathname == link.path ? active_link : ''}>
+                            <ListItem disablePadding onClick={() => setTimeout(() => {dispatch(closeDrawer())}, 500)} >
+                                <ListItemButton sx={router.pathname == link.path ? active_link : {}}>
                                     <Tooltip title={link.name} >
                                         <ListItemIcon sx={{ color: 'inherit'}} >{link.icon}</ListItemIcon>
                                     </Tooltip>
@@ -96,6 +106,7 @@ const DrawerComponent = ({width, variant, display}) => {
     
                 <ListItem sx={{position: 'absolute', bottom: 0}} disablePadding>
                     <ListItemButton>
+                        <ListItemIcon ><Logout sx={{ color: 'red'}} /></ListItemIcon>
                         <ListItemText>Logout</ListItemText>
                     </ListItemButton>
                 </ListItem> 
