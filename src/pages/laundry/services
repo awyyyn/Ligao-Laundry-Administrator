@@ -42,5 +42,4 @@ const services = [
         price: 100,
     }, 
     
-];
-export default services;
+]; 
