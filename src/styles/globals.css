@@ -3,7 +3,8 @@
 ::-webkit-scrollbar {
     position: absolute;
     background-color: white;
-    width: 8px;
+    height: 5px;
+    width: 5px;
 }
 ::-webkit-scrollbar-thumb {
     background-color: gray;

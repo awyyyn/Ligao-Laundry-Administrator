@@ -123,7 +123,7 @@ export default function Index() {
             </Drawer> 
             
 
-            <Grid container height='calc(100vh - 60px)' width={`${drawerState ? 'calc(100% - 250px)' : '100%'}`} sx={{transition: 'all 0.5s ease-in-out'}}>
+            <Grid container height='100%' width={`${drawerState ? 'calc(100% - 250px)' : '100%'}`} sx={{transition: 'all 0.5s ease-in-out'}}>
                 <Grid item xs={12}  height='4rem' >
                     <Box  
                         height='100%' 
@@ -170,7 +170,7 @@ export default function Index() {
                             <Box sx={{height: '90%', overflow: 'hidden'}}>
                                 <Stack  sx={{overflow: 'auto', p: 1, height: '100%', display: 'flex', flexDirection: 'column-reverse', }}>
                                     {messages.map((message) => {
-        
+
                                         return( 
                                             <Box 
                                                 key={message.id}  
