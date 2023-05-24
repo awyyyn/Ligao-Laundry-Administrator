@@ -20,16 +20,17 @@ export default function Index() {
         setCustomers(data);
     }   
 
-    useEffect(() => {
-        getMessages()
-    });
-
     
     async function getMessages() {
         const { data } = await supabase.from('message_channel').select().eq('sender_id', id).order('created_at', {ascending: false});
  
         setMessages(data);
     }
+    
+    useEffect(() => {
+        getMessages()
+    });
+
  
     
     useEffect(() => {   
@@ -78,7 +79,7 @@ export default function Index() {
                     <Typography width='100%'  sx={{paddingLeft: 1,position: 'absolute', top: 0, fontSize: '1.8rem', zIndex: 5, marginTop: '60px', borderBottom: '1px solid rgba(0, 41, 51, 0.2)'}}>Chats</Typography>
                    
                     <Stack sx={{marginTop: 'calc(60px + 3rem)'}} direction='column'  >
-                        {customers?.map((customer) => {  
+                        {customers.map((customer) => {  
                             return(
                                 <Typography 
                                     fontSize='1.3rem' 

@@ -1,4 +1,4 @@
-export const service = [
+const services = [
     {
         name: 'Wash',
         sub: 'Dry and Fold',
@@ -42,4 +42,5 @@ export const service = [
         price: 100,
     }, 
     
-]
+];
+export default services;
