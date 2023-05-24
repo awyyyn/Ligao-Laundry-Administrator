@@ -21,17 +21,11 @@ export default function Index() {
     }   
 
     
-    async function getMessages() {
+    async function getMessages(id) {
         const { data } = await supabase.from('message_channel').select().eq('sender_id', id).order('created_at', {ascending: false});
  
         setMessages(data);
-    }
-    
-    useEffect(() => {
-        getMessages()
-    });
-
- 
+    } 
     
     useEffect(() => {   
         getCustomersName(); 
@@ -98,7 +92,8 @@ export default function Index() {
                                     }} 
                                     onClick={() => {
                                         setId(customer.user_id);
-                                        setName(customer.name); 
+                                        setName(customer.name);                       
+                                        getMessages(customer.user_id);
                                     }}
                                 >
                                     {customer.name}
@@ -122,7 +117,7 @@ export default function Index() {
                 </Box>
             </Drawer> 
             
-
+            
             <Grid container height='100%' width={`${drawerState ? 'calc(100% - 250px)' : '100%'}`} sx={{transition: 'all 0.5s ease-in-out'}}>
                 <Grid item xs={12}  height='4rem' >
                     <Box  
@@ -167,7 +162,7 @@ export default function Index() {
                             }}
                         >     
         
-                            <Box sx={{height: {xs: 'calc(100% - 70px)', sm: '90%'}, overflow: 'hidden'}}>
+                            <Box sx={{height: {xs: 'calc(90% - 70px)', sm: '90%'}, overflow: 'hidden'}}>
                                 <Stack  sx={{overflow: 'auto', p: 1, height: '100%', display: 'flex', flexDirection: 'column-reverse', }}>
                                     {messages.map((message) => {
 
@@ -199,7 +194,7 @@ export default function Index() {
                                     }
                                 </Stack>
                             </Box>
-                            <Box sx={{height: {xs: '70px', sm: '10%'}, borderTop: '1px solid rgba(0, 0, 0, 0.2)', display: 'flex', position: 'relative'}}>
+                            <Box sx={{height: {xs: '70px', sm: '10%'}, backgroundColor  : {xs: 'red', sm: 'blue'}, borderTop: '1px solid rgba(0, 0, 0, 0.2)', display: 'flex', position: 'relative'}}>
                                 <Input 
                                     sx={{fontSize: '2rem', width: '100%', paddingX: 2, paddingRight: 6, overflow: 'auto'}} 
                                     onKeyDown={(e) => e.key == "Enter" && sendMessage()} 
