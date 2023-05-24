@@ -167,7 +167,7 @@ export default function Index() {
                             }}
                         >     
         
-                            <Box sx={{height: '90%', overflow: 'hidden'}}>
+                            <Box sx={{height: {xs: 'calc(100% - 70px)', sm: '90%'}, overflow: 'hidden'}}>
                                 <Stack  sx={{overflow: 'auto', p: 1, height: '100%', display: 'flex', flexDirection: 'column-reverse', }}>
                                     {messages.map((message) => {
 
@@ -199,7 +199,7 @@ export default function Index() {
                                     }
                                 </Stack>
                             </Box>
-                            <Box sx={{height: '10%', borderTop: '1px solid rgba(0, 0, 0, 0.2)', display: 'flex', position: 'relative'}}>
+                            <Box sx={{height: {xs: '70px', sm: '10%'}, borderTop: '1px solid rgba(0, 0, 0, 0.2)', display: 'flex', position: 'relative'}}>
                                 <Input 
                                     sx={{fontSize: '2rem', width: '100%', paddingX: 2, paddingRight: 6, overflow: 'auto'}} 
                                     onKeyDown={(e) => e.key == "Enter" && sendMessage()} 
