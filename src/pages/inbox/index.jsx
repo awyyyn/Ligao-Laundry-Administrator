@@ -62,6 +62,9 @@ export default function Index() {
 
     return (
         <LayoutAdmin>  
+
+
+            {/* DDRAAAAAAWEEEEEEEEER */}
             <Drawer 
                 variant='persistent'
                 open={drawerState}
@@ -70,7 +73,9 @@ export default function Index() {
                 style={{right: 0, position: 'absolute', overflow: 'hidden', zIndex: 7, paddingTop: '60px'}}
             >
                 <Box height='100vh' overflow='auto' width='250px' position='relative' display='flex' flexDirection='column'> 
-                    <Typography width='100%'  sx={{paddingLeft: 1,position: 'absolute', top: 0, fontSize: '1.8rem', zIndex: 5, marginTop: '60px', borderBottom: '1px solid rgba(0, 41, 51, 0.2)'}}>Chats</Typography>
+                    <Typography width='100%'  sx={{paddingLeft: 1,position: 'absolute', top: 0, fontSize: '1.8rem', zIndex: 5, marginTop: '60px', borderBottom: '1px solid rgba(0, 41, 51, 0.2)'}}>
+                        Chats
+                    </Typography>
                    
                     <Stack sx={{marginTop: 'calc(60px + 3rem)'}} direction='column'  >
                         {customers.map((customer) => {  
@@ -88,7 +93,7 @@ export default function Index() {
                                         paddingY: 1,  
                                         display: 'flex',
                                         justifyContent: 'space-between',
-                                        fontSize: '400'
+                                        fontWeight: '400'
                                     }} 
                                     onClick={() => {
                                         setId(customer.user_id);
@@ -117,16 +122,18 @@ export default function Index() {
                 </Box>
             </Drawer> 
             
+            {/* DRAAAAWERRR */}
+            
             
             <Grid container height='100%' width={`${drawerState ? 'calc(100% - 250px)' : '100%'}`} sx={{transition: 'all 0.5s ease-in-out'}}>
-                <Grid item xs={12} >
-                    <Box  
-                        height='4rem' 
+                <Grid item xs={12} height='4rem'  >
+                    <Box   
+                        height='100%'
                         sx={{
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            paddingLeft: 3,
+                            paddingLeft: 3, 
                             boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)'
                         }}
                         
