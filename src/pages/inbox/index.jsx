@@ -119,9 +119,9 @@ export default function Index() {
             
             
             <Grid container height='100%' width={`${drawerState ? 'calc(100% - 250px)' : '100%'}`} sx={{transition: 'all 0.5s ease-in-out'}}>
-                <Grid item xs={12}  height='4rem' >
+                <Grid item xs={12} >
                     <Box  
-                        height='100%' 
+                        height='4rem' 
                         sx={{
                             display: 'flex',
                             justifyContent: 'space-between',
@@ -150,6 +150,7 @@ export default function Index() {
                         }}
                     >
                         <Inbox sx={{height: 200, width: 200, color: '#00667E'}} />
+                        <p>Chats</p>
                     </Box>
                     :
                     ( 
@@ -157,7 +158,7 @@ export default function Index() {
                             item 
                             xs={12} 
                             sx={{
-                                height: {xs: '90%', sm: 'calc(100% - 4rem)'},
+                                height: {xs: '80%', sm: 'calc(100% - 4rem)'},
                                 position: 'relative',   
                             }}
                         >     
