@@ -165,7 +165,7 @@ export default function Index() {
                             item 
                             xs={12} 
                             sx={{
-                                height: {xs: 'calc(100% - 60px - 10%)', sm: 'calc(100% - 60px)'},
+                                height: {xs: 'calc(100% - 60px - 15%)', sm: 'calc(100% - 60px)'},
                                 position: 'relative',   
                             }}
                         >     
