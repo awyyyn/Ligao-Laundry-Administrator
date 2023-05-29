@@ -1,5 +1,4 @@
-import { Alert, Snackbar as Snack } from "@mui/material";
-import theme from "@/customization";
+import { Alert, Snackbar as Snack } from "@mui/material"; 
 
 export default function Snackbar({
     message,
@@ -18,7 +17,7 @@ export default function Snackbar({
             open={isOpen}
             anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             onClose={handleClose}
-            autoHideDuration={duration} 
+            autoHideDuration={Number(duration)} 
         >
             <Alert sx={{backgroundColor: color }} severity={type} variant="filled" onClose={handleClose}>
                 {message}
