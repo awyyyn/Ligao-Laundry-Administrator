@@ -1,12 +1,16 @@
-import React from 'react';
 import LayoutAdmin from '../layouts/adminlayout';
-import { Box, Grid, IconButton, Typography, Drawer, Stack, Divider, Input,  } from '@mui/material'
+import { Box, Grid, IconButton, Typography, Drawer, Stack, Divider, Input, Skeleton,  } from '@mui/material'
 import { ChevronLeft, ChevronRight,  Inbox,  Send } from '@mui/icons-material'
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { supabase } from '@/supabase';
-import { useEffect } from 'react';
+import { useEffect } from 'react'; 
+import { useRouter } from 'next/router';
 
 export default function Index() {   
+ 
+    const router = useRouter();
+
+    const [skeleton, setSkeleton] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [drawerState, setDrawerState] = useState(true);
     const [id, setId] = useState('');
@@ -18,26 +22,22 @@ export default function Index() {
     async function getCustomersName () {    
         const { data } = await supabase.from('customers').select('*'); 
         setCustomers(data);
+        setSkeleton(!skeleton);
     }   
-
     
     async function getMessages(id) {
         const { data } = await supabase.from('message_channel').select().eq('sender_id', id).order('created_at', {ascending: false});
- 
         setMessages(data);
     } 
     
     useEffect(() => {   
         getCustomersName(); 
-
         const subs = supabase.channel('any')
             .on('postgres_changes', { event: '*', schema : 'public', table: "message_channel"}, (payload) => {
                 console.log(payload)
                 setMessages(pre => [payload.new, ...pre]) 
             }).subscribe(); 
-            
         return () => supabase.removeChannel(subs);
-
     }, []);
 
     // useEffect(() => {
@@ -59,7 +59,7 @@ export default function Index() {
         console.log(error?.details)
         setMessage('');
     }
-
+     
     return (
         <LayoutAdmin>  
 
@@ -77,53 +77,65 @@ export default function Index() {
                         Chats
                     </Typography>
                    
-                    <Stack sx={{marginTop: 'calc(60px + 3rem)'}} direction='column'  >
-                        {customers.map((customer) => {  
-                            return(
-                                <Typography 
-                                    fontSize='1.3rem' 
-                                    key={customer.user_id} 
-                                    bgcolor={name == customer.name ? 'rgba(0, 41, 51, 0.1)' : ''}
-                                    sx={{
-                                        cursor: 'pointer', 
-                                        '&:hover': {
-                                            bgcolor: 'rgba(0, 41, 51, 0.1)'
-                                        }, 
-                                        paddingX: 1, 
-                                        paddingY: 1,  
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        fontWeight: '400'
-                                    }} 
-                                    onClick={() => {
-                                        setId(customer.user_id);
-                                        setName(customer.name);                       
-                                        getMessages(customer.user_id);
-                                    }}
-                                >
-                                    {customer.name}
-                                    {/* <span 
-                                        style={{
-                                            color: '#ffffff', 
-                                            backgroundColor: 'rgba(255, 0, 0, 0.8)', 
-                                            paddingInline: 9, 
-                                            fontSize: '17px', 
-                                            borderRadius: '100%', 
-                                            marginBlock: 'auto',
-                                            fontSize
-                                        }}
-                                    >   
-                                        {}
-                                    </span> */}
-                                </Typography>       
-                            )
-                        })} 
-                    </Stack>
+                    {skeleton ? 
+                        <Stack spacing={1} px={1} display='flex'  sx={{marginTop: 'calc(60px + 3rem)'}}> 
+                            <Skeleton height={70}   width='100%' /> 
+                            <Skeleton height={70} width='100%' /> 
+                            <Skeleton height={70} width='100%' /> 
+                            <Skeleton height={70} width='100%' /> 
+                            <Skeleton height={70} width='100%' /> 
+                            <Skeleton height={70} width='100%' /> 
+                            <Skeleton height={70} width='100%' /> 
+                            <Skeleton height={70} width='100%' />  
+                        </Stack>
+                        :
+                        <Stack sx={{marginTop: 'calc(60px + 3rem)'}} direction='column'>
+                                {customers.map((customer) => {  
+                                    return(
+                                        <Typography 
+                                            fontSize='1.3rem' 
+                                            key={customer.user_id} 
+                                            bgcolor={name == customer.name ? 'rgba(0, 41, 51, 0.1)' : ''}
+                                            sx={{
+                                                cursor: 'pointer', 
+                                                '&:hover': {
+                                                    bgcolor: 'rgba(0, 41, 51, 0.1)'
+                                                }, 
+                                                paddingX: 1, 
+                                                paddingY: 1,  
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                fontWeight: '400'
+                                            }} 
+                                            onClick={() => {
+                                                setId(customer.user_id);
+                                                setName(customer.name);                       
+                                                getMessages(customer.user_id);
+                                            }}
+                                        >
+                                            {customer.name}
+                                            {/* <span 
+                                                style={{
+                                                    color: '#ffffff', 
+                                                    backgroundColor: 'rgba(255, 0, 0, 0.8)', 
+                                                    paddingInline: 9, 
+                                                    fontSize: '17px', 
+                                                    borderRadius: '100%', 
+                                                    marginBlock: 'auto',
+                                                    fontSize
+                                                }}
+                                            >   
+                                                {}
+                                            </span> */}
+                                        </Typography>       
+                                    )
+                                }    
+                            )} 
+                        </Stack>
+                    } 
                 </Box>
             </Drawer> 
-            
-            {/* DRAAAAWERRR */}
-            
+             
             
             <Grid container height='100%' width={`${drawerState ? 'calc(100% - 250px)' : '100%'}`} sx={{transition: 'all 0.5s ease-in-out'}}>
                 <Grid item xs={12}   >

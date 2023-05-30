@@ -1,12 +1,13 @@
 import { Drawer, ListItem as ListI, ListItemText, Typography, Divider, Tooltip, ListItemIcon, ListItemButton, ListSubheader, List, Box } from "@mui/material"
 import Image from "next/image"
-import { CheckBox, CheckBoxTwoTone, ChevronLeft, Dashboard, Inbox, LocalLaundryService, Logout } from "@mui/icons-material";
+import { CheckBox, CheckBoxTwoTone, Checklist, ChevronLeft, Dashboard, Inbox, LocalLaundryService, Logout } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import theme from "@/customization";
 import styled from "@emotion/styled";
 import { useDispatch, useSelector } from "react-redux";
 import { closeDrawer } from "../slices/uxSlice.js";
 import Link from "next/link";
+import { supabase } from "@/supabase/index.js";
 
 const DrawerComponent = ({width, variant, display}) => {
     const router = useRouter();
@@ -43,13 +44,13 @@ const DrawerComponent = ({width, variant, display}) => {
         },
         {
             name: "Add Laundry",
-            path: 'laundry',
+            path: '/laundry',
             icon: <LocalLaundryService />
-        },
+        }, 
         {
-            name: "Status",
-            path: 'status',
-            icon: <CheckBox />
+            name: "Laundries",
+            path: '/laundries',
+            icon: <Checklist />
         }
     ]
     return (
@@ -104,7 +105,10 @@ const DrawerComponent = ({width, variant, display}) => {
                     )
                 })} 
     
-                <ListItem sx={{position: 'absolute', bottom: 0}} disablePadding>
+                <ListItem sx={{position: 'absolute', bottom: 0}} disablePadding onClick={async() => { 
+                    await supabase.auth.signOut();
+                    router.push('/auth/login');
+                }}>
                     <ListItemButton>
                         <ListItemIcon ><Logout sx={{ color: 'red'}} /></ListItemIcon>
                         <ListItemText>Logout</ListItemText>
