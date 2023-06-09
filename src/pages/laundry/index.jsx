@@ -6,7 +6,7 @@ import { number } from 'yup';
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab';
 import { Add, ConstructionOutlined, LeakAddRounded } from '@mui/icons-material';
 import { supabase } from '@/supabase';
-import { ConfirmModal, DeleteModal, Snackbar } from '@/components';
+import { ConfirmModal, DeleteModal, Snackbar } from '../../components';
 import { useRouter } from 'next/router';
  
 
