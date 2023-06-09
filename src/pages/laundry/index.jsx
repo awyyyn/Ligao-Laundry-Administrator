@@ -1,17 +1,22 @@
-import React, { useState } from 'react'
+"use client"
+import React, { useState, useEffect } from 'react'
 import LayoutAdmin from '../layouts/adminlayout'
-import { Grid, TextField, Stack, FormControl, InputLabel, Select, MenuItem, Input, InputAdornment, Button, Typography, IconButton, Tabs, Tab, Divider } from '@mui/material'
+import { Grid, TextField, Stack, FormControl, InputLabel, Select, MenuItem, Input, InputAdornment, Button, Typography, IconButton, Tabs, Tab, Divider, TableContainer, Paper, Table, TableHead, TableCell, TableBody, TableRow } from '@mui/material'
 import { number } from 'yup';
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab';
-import { Add } from '@mui/icons-material';
+import { Add, ConstructionOutlined, LeakAddRounded } from '@mui/icons-material';
 import { supabase } from '@/supabase';
-import { Snackbar } from '@/components';
+import { ConfirmModal, DeleteModal, Snackbar } from '@/components';
 import { useRouter } from 'next/router';
  
 
 export default function Index() {
 
     const router = useRouter();
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deleteData, setDeleteData] = useState();
+    const [confirmModal, setConfirmModal] = useState(false);
+    const [confirmData, setConfirmData] = useState();
 
     const [snackbar, setSnackbar] = useState({
         isOpen: false,
@@ -20,7 +25,7 @@ export default function Index() {
         type: 'success',
         color: '' 
     })
-    const [tab, setTabs] = useState(0);
+    const [tab, setTabs] = useState('0');
     const [submitting, setIsSubmitting] = useState(false);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -30,6 +35,7 @@ export default function Index() {
         tempPrice: 0,
         price: 0
     });
+    const [bookedLaundries, setBookedLaundries] = useState(); 
 
     const [err, setErr] = useState({
         nameErr: '',
@@ -40,7 +46,30 @@ export default function Index() {
     });
 
     const [kg, setKg] = useState(1);
-     
+
+    /* GET CUSTOEMRS BOOKED  */
+    const getBooked = async() => {
+        const { data, error } = await supabase.from('laundries_table').select().or('user_id.eq.null,status.eq.pending').order('date', {ascending: false})
+        if(error) console.log(error)
+        // console.log(data)
+        // console.log("=====================================================================================")
+        setBookedLaundries(data);
+    }
+
+    /* REALTIME UPDATE */
+    useEffect(() => {
+        const subscription = supabase.channel('any').on('postgres_changes',  {event: "*", schema: 'public', table: 'laundries_table'}, (payload) => {
+           
+            getBooked();
+            console.log(payload.new)
+        }).subscribe()
+
+        return () => supabase.removeChannel(subscription)
+    }, [])
+ 
+    useEffect(() => {
+        getBooked();
+    }, [])
 
     /* FORM VALIDATION */
     const validation = () => {
@@ -62,15 +91,16 @@ export default function Index() {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-
+        const date = new Date();
         if(err.nameErr || err.addressErr || err.typeErr || err.numberErr || err.priceErr){ 
             return console.log('error')
         }
         setIsSubmitting(true);
+        let num = 1;
 
         /* SAVE TO DATABASE */
         const { data, error } = await supabase.from('laundries_table')
-            .insert({name, address, service_type: type, status: 'preparing', phone, price: price.price}).select()
+            .insert({name, address, service_type: type, status: 'preparing', phone, price: price.price, date: date.toLocaleDateString()}).select()
 
         
         if(error){ 
@@ -80,7 +110,7 @@ export default function Index() {
                     duration: 5000,
                     isOpen: true,
                     message: "Something went wrong",
-                    type: 'error'
+                    type: 'error'       
                 })); 
         }
         
@@ -101,9 +131,11 @@ export default function Index() {
     }
    
     
-   if(router.isFallback){
+    if(router.isFallback){
         return <h1>Loading...</h1>
-   }
+    }
+
+    const headerTableStyle = { backgroundColor: '#00667E',color: '#FFFFFF' }
 
     return (
         <LayoutAdmin>
@@ -111,12 +143,14 @@ export default function Index() {
                 <Snackbar isOpen={snackbar.isOpen} message={snackbar.message} color={snackbar.color} duration={snackbar.duration} handleClose={() => setSnackbar(pre => ({...pre, isOpen: false}))} type={snackbar.type} />
                 <Grid item xs={12} sx={{padding: {xs: 2, sm: 5}, width: '100%'}}> 
                     <TabContext value={tab}>
-                        <Tabs value={tab} onChange={(e, index) => setTabs(index)} sx={{width: '100%'}}>
-                            <Tab label="Add Laundry" value={0} />
-                            <Tab label="Booked Laundry" value={1} />
+                        <Tabs value={tab} onChange={(e, index) => { 
+                            setTabs(index)
+                        }} sx={{width: '100%'}}>
+                            <Tab label="Add Laundry" value={'0'} />
+                            <Tab label="Booked Laundry" value={'1'} />
                         </Tabs>
                         <Divider />
-                        <TabPanel value={0} sx={{width: '100%'}}>
+                        <TabPanel value={'0'} sx={{width: '100%'}}>
                             <form style={{width: '100%',}} onSubmit={handleSubmit} >
                                 <Stack  width='100%' spacing={2}  >
                                     <Typography>Add Laundry</Typography>
@@ -239,15 +273,76 @@ export default function Index() {
                                         loadingIndicator='Adding Laundry...'
                                         onClick={validation}
                                         startIcon={<Add />}
-                                        >
-
+                                        > 
                                         Add Laundry 
                                     </LoadingButton>    
                                 </Stack>
                             </form>
                         </TabPanel>
-                        <TabPanel value={1}>
-                            <h1>books</h1>
+                        <TabPanel value={'1'} style={{overflowX: 'auto'}}> 
+                            <ConfirmModal 
+                                isOpen={confirmModal}
+                                data={confirmData}
+                                handleClose={() => {
+                                    setConfirmModal(false)
+                                    setConfirmData('')
+                                }}
+                            />
+                            <DeleteModal 
+                                isOpen={deleteModal} 
+                                data={deleteData} 
+                                handleClose={() => {
+                                    setDeleteModal(false);
+                                    setDeleteData('')
+                                }} 
+                                handleDelete={async(id) => {
+                                    const { error } = await supabase.from('laundries_table').delete().eq('id', id);
+                                    console.log(error);
+                                    setTimeout(() => {    
+                                        setDeleteModal(false);
+                                    }, 1000);
+                                }}
+                            />
+                            <TableContainer component={Paper}>
+                                <Table stickyHeader>
+                                    <TableHead > 
+                                        <TableRow >
+                                            <TableCell sx={headerTableStyle}>Name</TableCell>
+                                            <TableCell sx={headerTableStyle}>Service</TableCell>
+                                            <TableCell sx={headerTableStyle}>Time</TableCell>
+                                            <TableCell sx={headerTableStyle}>Date</TableCell>
+                                            <TableCell sx={headerTableStyle}>Cancel</TableCell>
+                                            <TableCell sx={headerTableStyle}>Confirm</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {bookedLaundries?.map(laundry => {
+                                            return (
+                                                <TableRow key={laundry.id}> 
+                                                    <TableCell>{laundry.name}</TableCell>
+                                                    <TableCell>{laundry.service_type}</TableCell>
+                                                    <TableCell>{laundry.time}</TableCell>
+                                                    <TableCell>{laundry.date}</TableCell>
+                                                    <TableCell 
+                                                        onClick={() => {
+                                                            setDeleteData(laundry);
+                                                            setDeleteModal(true)
+                                                        }}
+                                                        sx={{'&:hover': {color: "#FF0000", cursor: 'pointer'}}}
+                                                    >Delete</TableCell>
+                                                    <TableCell
+                                                        onClick={() => {
+                                                            setConfirmData(laundry);
+                                                            setConfirmModal(true);
+                                                        }}
+                                                        sx={{'&:hover': {color: '#00667E', cursor: 'pointer'}}}
+                                                    >Confirm</TableCell>
+                                                </TableRow>
+                                            )
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
                         </TabPanel>
                     </TabContext>
                 </Grid>
