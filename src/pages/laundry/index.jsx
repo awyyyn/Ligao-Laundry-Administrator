@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react'
 import LayoutAdmin from '../layouts/adminlayout'
-import { Grid, TextField, Stack, FormControl, InputLabel, Select, MenuItem, Input, InputAdornment, Button, Typography, IconButton, Tabs, Tab, Divider, TableContainer, Paper, Table, TableHead, TableCell, TableBody, TableRow } from '@mui/material'
+import { Grid, TextField, Stack, FormControl, InputLabel, Select, MenuItem, Input, InputAdornment, Button, Typography, IconButton, Tabs, Tab, Divider, TableContainer, Paper, Table, TableHead, TableCell, TableBody, TableRow, Box } from '@mui/material'
 import { number } from 'yup';
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab';
 import { Add, ConstructionOutlined, LeakAddRounded } from '@mui/icons-material';
@@ -36,7 +36,7 @@ export default function Index() {
         price: 0
     });
     const [bookedLaundries, setBookedLaundries] = useState(); 
-
+    const [bookedLaundriesLength, setBookedLaundriesLength] = useState(0);
     const [err, setErr] = useState({
         nameErr: '',
         addressErr: '',
@@ -53,6 +53,8 @@ export default function Index() {
         if(error) console.log(error)
         // console.log(data)
         // console.log("=====================================================================================")
+        console.log(data?.length);
+        setBookedLaundriesLength(data.length)
         setBookedLaundries(data);
     }
 
@@ -100,7 +102,16 @@ export default function Index() {
 
         /* SAVE TO DATABASE */
         const { data, error } = await supabase.from('laundries_table')
-            .insert({name, address, service_type: type, status: 'preparing', phone, price: price.price, date: date.toLocaleDateString()}).select()
+            .insert({
+                name, 
+                address, 
+                service_type: type, 
+                status: 'washing', 
+                phone, 
+                price: price.price, 
+                date: date.toLocaleDateString(),
+                user_id: 'walkin'
+            }).select()
 
         
         if(error){ 
@@ -316,30 +327,42 @@ export default function Index() {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {bookedLaundries?.map(laundry => {
-                                            return (
-                                                <TableRow key={laundry.id}> 
-                                                    <TableCell>{laundry.name}</TableCell>
-                                                    <TableCell>{laundry.service_type}</TableCell>
-                                                    <TableCell>{laundry.time}</TableCell>
-                                                    <TableCell>{laundry.date}</TableCell>
-                                                    <TableCell 
-                                                        onClick={() => {
-                                                            setDeleteData(laundry);
-                                                            setDeleteModal(true)
-                                                        }}
-                                                        sx={{'&:hover': {color: "#FF0000", cursor: 'pointer'}}}
-                                                    >Delete</TableCell>
-                                                    <TableCell
-                                                        onClick={() => {
-                                                            setConfirmData(laundry);
-                                                            setConfirmModal(true);
-                                                        }}
-                                                        sx={{'&:hover': {color: '#00667E', cursor: 'pointer'}}}
-                                                    >Confirm</TableCell>
+                                        {!bookedLaundriesLength ? 
+                                            (
+                                                <TableRow>
+                                                    <TableCell colSpan={6} > 
+                                                        <center>
+                                                            <Typography  >0 booked laundry</Typography>
+                                                        </center>
+                                                    </TableCell>
                                                 </TableRow>
+                                            ) : ( 
+                                                bookedLaundries?.map(laundry => {
+                                                    return (
+                                                        <TableRow key={laundry.id}> 
+                                                            <TableCell>{laundry.name}</TableCell>
+                                                            <TableCell>{laundry.service_type}</TableCell>
+                                                            <TableCell>{laundry.time}</TableCell>
+                                                            <TableCell>{laundry.date}</TableCell>
+                                                            <TableCell 
+                                                                onClick={() => {
+                                                                    setDeleteData(laundry);
+                                                                    setDeleteModal(true)
+                                                                }}
+                                                                sx={{'&:hover': {color: "#FF0000", cursor: 'pointer'}}}
+                                                            >Delete</TableCell>
+                                                            <TableCell
+                                                                onClick={() => {
+                                                                    setConfirmData(laundry);
+                                                                    setConfirmModal(true);
+                                                                }}
+                                                                sx={{'&:hover': {color: '#00667E', cursor: 'pointer'}}}
+                                                            >Confirm</TableCell>
+                                                        </TableRow>
+                                                    ) 
+                                                })
                                             )
-                                        })}
+                                        }
                                     </TableBody>
                                 </Table>
                             </TableContainer>
