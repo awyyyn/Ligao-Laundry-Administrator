@@ -21,7 +21,7 @@ export default function DeleteModal({data, isOpen, handleClose, handleDelete}) {
                 <Stack spacing={2} >
                     <Stack direction='row' alignSelf={{xs: 'center', sm: 'flex-start'}}>
                         {/* <PriorityHighIcon elevation={2} fontSize='large' htmlColor='red' />     */}
-                        <Typography variant={'h4'}>Confirm</Typography>
+                        <Typography variant={'h4'}>Delete Booking</Typography>
                     </Stack>
                     <Typography textAlign='center' textOverflow='initial' style={{textIndent: 15, marginRight: 15}} >
                         Are you sure to Delete {data && data.name} booked laundry? 

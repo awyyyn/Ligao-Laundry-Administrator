@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 export default function Index() {   
  
     const router = useRouter();
-
+    
     const [skeleton, setSkeleton] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [drawerState, setDrawerState] = useState(true);
@@ -18,6 +18,11 @@ export default function Index() {
     const [messages, setMessages] = useState([]);
     const [err, setErr] = useState(false);
     const [message, setMessage] = useState('');
+    const [unread, setUnread] = useState(0);
+
+    async function getUnreadMessages() {
+        const { data } = await supabase.from('message_channel').select().match({})
+    }
 
     async function getCustomersName () {    
         const { data } = await supabase.from('customers').select('*'); 
@@ -30,16 +35,32 @@ export default function Index() {
         setMessages(data);
     } 
     
-    useEffect(() => {   
-        getCustomersName(); 
-        const subs = supabase.channel('any')
-            .on('postgres_changes', { event: '*', schema : 'public', table: "message_channel"}, (payload) => {
-                console.log(payload)
-                setMessages(pre => [payload.new, ...pre]) 
-            }).subscribe(); 
-        return () => supabase.removeChannel(subs);
-    }, []);
 
+    useEffect(() => {
+        getCustomersName();
+        
+    }, [])
+
+
+    useEffect(() => {   
+
+
+        const subs = supabase.channel('any')
+            .on('postgres_changes', { event: 'INSERT', schema : 'public', table: "message_channel"}, (payload) => { 
+                if(id == payload.new.sender_id){
+                    console.log("ADD MESSAGE")
+                    setMessages(pre => ([payload.new, ...pre]));
+                }
+                // console.log("SENDER_ID", payload.new.sender_id)
+            }).subscribe(); 
+
+        return () => supabase.removeChannel(subs);
+
+    }, [id]);
+
+    // console.log(messages)
+    // console.log(id)
+    
     // useEffect(() => {
     //     async function getUnreadMessage() {
     //         const { data } = await supabase.from("message_channel").select('*', {count: 'exact', head: true});
@@ -52,11 +73,12 @@ export default function Index() {
     // if(err) return <LayoutAdmin><h1>Network Error</h1></LayoutAdmin>
 
     /* SEND MESSAGE FUNCTION */
-    const sendMessage = async() => {
+    const sendMessage = async(sender_id) => {
+        console.log(sender_id)
         if(message == "") return  
-        const {data, error} = await supabase.from('message_channel').insert({sender_id: id, recipent_id: 'admin', message: message }).select();
-        console.log(data)
-        console.log(error?.details)
+        const {data, error} = await supabase.from('message_channel').insert({sender_id: sender_id, recipent_id: 'admin', message: message }).select();
+        // console.log(data)
+        // console.log(error?.details)
         setMessage('');
     }
      
@@ -121,12 +143,11 @@ export default function Index() {
                                                     paddingInline: 9, 
                                                     fontSize: '17px', 
                                                     borderRadius: '100%', 
-                                                    marginBlock: 'auto',
-                                                    fontSize
+                                                    marginBlock: 'auto',    
                                                 }}
                                             >   
-                                                {}
-                                            </span> */}
+                                                {1}
+                                            </span> */} 
                                         </Typography>       
                                     )
                                 }    
@@ -217,14 +238,14 @@ export default function Index() {
                             <Box sx={{height: '10%', /* backgroundColor  : {xs: 'red', sm: 'blue'},  */borderTop: '1px solid rgba(0, 0, 0, 0.2)', display: 'flex', position: 'relative'}}>
                                 <Input 
                                     sx={{fontSize: '2rem', width: '100%', paddingX: 2, paddingRight: 6, overflow: 'auto'}} 
-                                    onKeyDown={(e) => e.key == "Enter" && sendMessage()} 
+                                    onKeyDown={(e) => e.key == "Enter" && sendMessage(id)} 
                                     onChange={(e) => setMessage(e.target.value)}
                                     placeholder='...'
                                     value={message}
                                     />
                                 <Send 
                                     sx={{height: '100%', position: 'absolute', zIndex: 5, right: 5, width: 40, "&:hover": {color: '#00667E', cursor: 'pointer'}}}
-                                    onClick={() => sendMessage()}
+                                    onClick={() => sendMessage(id)}
                                     />
                             </Box>
                         

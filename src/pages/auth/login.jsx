@@ -157,6 +157,7 @@ export default function Home () {
                     onBlur={handleBlur('password')}
                     helperText={errors.password && errors.password}  
                     name="password"
+                    onKeyUp={(e) => e.key == "Enter" ? handleSubmit() : null}
                     value={values.password}
                   />
                   <PrimaryBTN size="large"  onClick={handleSubmit} disabled={isLoading}>

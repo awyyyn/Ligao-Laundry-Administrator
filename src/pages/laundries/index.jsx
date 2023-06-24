@@ -3,6 +3,7 @@ import LayoutAdmin from "../layouts/adminlayout";
 import { TabContext, TabPanel } from "@mui/lab";
 import { useEffect, useState } from "react";
 import { supabase } from "@/supabase";
+import { FinishModal } from "@/components";
 
  
 export default function Index() {
@@ -13,6 +14,8 @@ export default function Index() {
         length: 0,
         data: []
     });
+    const [finishModal, setFinishModal] = useState(false);
+    const [finishData, setFinishData] = useState();
     const [bookedData, setBookedData] = useState({ 
         length: 0,
         data: []
@@ -21,11 +24,11 @@ export default function Index() {
     const walkInLaundries = async() => {
         const { data, error } = await supabase.from("laundries_table")
             .select()
-            .eq('user_id', "walkin")
+            .match({'user_id': "walkin", status: 'washing'})
             error && console.log( error) 
             setWalkinDta(prevData => ({
                 data,
-                length: data.length
+                length: data && data.length
             }));
             setWalkinLoading(false);
     } 
@@ -33,22 +36,43 @@ export default function Index() {
     const bookedLaundries = async() => {
         const { data, error } = await supabase.from("laundries_table")
             .select()
-            .neq('user_id', "walkin")
-        setBookedData((prevData) => ({data, length: data.length}));
+            .or('and(user_id.neq.walkin,status.eq.washing)')
+        setBookedData((prevData) => ({data, length: data && data.length}));
     }
+   
 
-    console.log(typeof walkinData)
-    console.log(walkinData)
     useEffect(() => {
         walkInLaundries();
-        bookedLaundries();
-    }, [])
+        bookedLaundries(); 
+        
+        const subscription = supabase.channel('any')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'laundries_table'}, (payload) => {
+                if(tab == 0){
+                    walkInLaundries();
+                }else{
+                    bookedLaundries();
+                }
+            })
+            .subscribe();
+
+            return () => supabase.removeChannel(subscription);
+
+    }, [tab])
 
     const tblHeadStyle = {backgroundColor: "#00667E", color: '#FFFFFF'}
 
     return (
         <LayoutAdmin> 
-            <Box sx={{padding: 5}}> 
+            <Box sx={{padding: 1, pt: 5}}> 
+                <FinishModal 
+                    isOpen={finishModal}
+                    handleClose={() => setFinishModal(false)}
+                    data={finishData}
+                    handleFinish={async(id) => {
+                        await supabase.from('laundries_table').update({'status': 'done'}).eq('id', id);
+                        setFinishModal(false)
+                    }}
+                />
                 <TabContext value={tab}>
                     <Tabs value={tab} onChange={(e, index) => setTab(index)}  >
                         <Tab label="Walkin Laundries" value={'0'} />
@@ -64,18 +88,19 @@ export default function Index() {
                                         <TableCell sx={tblHeadStyle}>Service Type</TableCell>
                                         <TableCell sx={tblHeadStyle}>Price</TableCell> 
                                         <TableCell sx={tblHeadStyle}>Status</TableCell> 
+                                        <TableCell sx={tblHeadStyle}>Finish</TableCell> 
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {  
                                         walkinLoading ? (
                                             <TableRow>
-                                                <TableCell>LOADING...</TableCell>
+                                                <TableCell>Loading...</TableCell>
                                             </TableRow>
                                         ) : (
                                             !walkinData.length ? (
                                                 <TableRow>
-                                                    <TableCell>ZERO</TableCell>
+                                                    <TableCell colSpan={5} sx={{textAlign: 'center'}}>No Laundry</TableCell>
                                                 </TableRow>
                                             ) : (
                                                 walkinData.data.map(laundry => (
@@ -84,9 +109,18 @@ export default function Index() {
                                                         <TableCell>{laundry.service_type}</TableCell>
                                                         <TableCell>₱  {laundry.price}</TableCell> 
                                                         <TableCell>{laundry.status}...</TableCell> 
+                                                        <TableCell
+                                                            onClick={() => {
+                                                                setFinishData(laundry)
+                                                                setFinishModal(true)
+                                                                console.log(laundry)
+                                                            }}
+                                                            sx={{
+                                                                '&:hover': {backgroundColor: '#00667E', color: "#FFFFFF", cursor: "pointer"}
+                                                            }}
+                                                        >Finish</TableCell>
                                                     </TableRow>
-                                                ))
-                                                
+                                                )) 
                                             )
                                         )
                                     }
@@ -103,13 +137,14 @@ export default function Index() {
                                     <TableCell sx={tblHeadStyle}>Service Type</TableCell>
                                     <TableCell sx={tblHeadStyle}>Price</TableCell> 
                                     <TableCell sx={tblHeadStyle}>Status</TableCell> 
+                                    <TableCell sx={tblHeadStyle}>Finish</TableCell> 
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 { 
                                     !bookedData.length ? (
                                         <TableRow>
-                                            <TableCell>ZERO</TableCell>
+                                                <TableCell colSpan={5} sx={{textAlign: 'center'}}>No Laundry</TableCell>
                                         </TableRow>
                                     ) : (
                                         bookedData.data.map(laundry => (
@@ -118,6 +153,16 @@ export default function Index() {
                                                 <TableCell>{laundry.service_type}</TableCell>
                                                 <TableCell>₱  {laundry.price}</TableCell> 
                                                 <TableCell>{laundry.status}...</TableCell> 
+                                                <TableCell 
+                                                    sx={{cursor: 'pointer'}}
+                                                    color="#00667E" 
+                                                    onClick={async() => {
+                                                        setFinishData(laundry)
+                                                        setFinishModal(true)
+                                                    }}
+                                                >
+                                                    Done
+                                                </TableCell> 
                                             </TableRow>
                                         )) 
                                     ) 

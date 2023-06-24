@@ -27,7 +27,12 @@ const PrimaryBTN = styled(Button)(({ theme }) => ({
     '&:hover, .MuiButton-root ': {
         color: theme.palette.primary.main, 
         border: '1px solid', 
-    }, 
+    },
+    '&:focus, .MuiButton-root ': {
+        color: theme.palette.primary.main, 
+        border: '1px solid', 
+    },
+    
     
 }));
 

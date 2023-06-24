@@ -4,12 +4,13 @@ import React, { useState } from 'react'
 
 export default function ConfirmModal({data, isOpen, handleClose}) {  
     const tempPrice = data && data.service_type == "Gown" ? "" : data && data.price
-    const [price, setPrice] = useState();
+    const [price, setPrice] = useState(0);
     const [kg, setKg] = useState();
     const numberOnly = /^\d+$/;  
     const handleConfirm = async() => {
         const id = data && data.id
         if(data.service_type == "Gown"){ 
+            if(price == "" || typeof price !== 'number') return alert('Price is required!')
             const { data, error } = await supabase.from('laundries_table')
                 .update({
                     price: price,
@@ -17,7 +18,8 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
                 })
                 .eq('id', id).select()
             if(error) console.log(error) 
-        }else{
+        }else{ 
+            if(kg == "" || kg == null) return alert('Kilogram is required!')
             const { data, error } = await supabase.from('laundries_table')
                 .update({
                     price: price,
