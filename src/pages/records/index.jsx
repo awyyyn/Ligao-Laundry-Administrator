@@ -3,6 +3,8 @@ import LayoutAdmin from '../layouts/adminlayout'
 import { Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { TableBar } from '@mui/icons-material'
 import { supabase } from '@/supabase'
+import Head from 'next/head'
+import CustomHead from '@/components/head'
 
 export default function Records() {
     const [records, setRecords] = useState([])
@@ -26,6 +28,7 @@ export default function Records() {
 
     return (
         <LayoutAdmin>
+            <CustomHead title='Records' />
             <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative' > 
                 <Box marginX={{sm: 0, md: 3}} marginTop={3} marginBottom={5} width='inherit' >
                     <div style={{boxShadow: '0px 2px 8px #00667E30', borderRadius: 5, overflow: 'hidden', marginInline: 10  }}>

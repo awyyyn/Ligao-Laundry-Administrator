@@ -40,7 +40,7 @@ export default function finishModal({handleClose, handleFinish, isOpen, data}) {
                                 '&:active': { backgroundColor: '#FF0000'}}}
                         >Cancel</Button>   
                         <Button  
-                            onClick={() => handleFinish(data.id)}
+                            onClick={() => handleFinish(data.id, data.user_id, data.service_type)}
                             fullWidth
                             variant='contained'
                             sx={{'&:hover': {  cursor: 'pointer'}}}

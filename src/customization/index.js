@@ -29,7 +29,7 @@ const PrimaryBTN = styled(Button)(({ theme }) => ({
         border: '1px solid', 
     },
     '&:focus, .MuiButton-root ': {
-        color: theme.palette.primary.main, 
+        color: '#FFFFFF', 
         border: '1px solid', 
     },
     

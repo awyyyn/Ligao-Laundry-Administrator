@@ -5,6 +5,8 @@ import { Fragment, useState } from 'react';
 import { supabase } from '@/supabase';
 import { useEffect } from 'react'; 
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+import CustomHead from '@/components/head';
 
 export default function Index() {   
  
@@ -84,7 +86,7 @@ export default function Index() {
      
     return (
         <LayoutAdmin>  
-
+            <CustomHead  title="Inbox" />
 
             {/* DDRAAAAAAWEEEEEEEEER */}
             <Drawer 

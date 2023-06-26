@@ -44,7 +44,7 @@ const DrawerComponent = ({width, variant, display}) => {
         },
         {
             name: "Add Laundry",
-            path: '/laundry',
+            path: '/add-laundry',
             icon: <LocalLaundryService />
         }, 
         {

@@ -4,6 +4,8 @@ import { TabContext, TabPanel } from "@mui/lab";
 import { useEffect, useState } from "react";
 import { supabase } from "@/supabase";
 import { FinishModal } from "@/components";
+import Head from "next/head";
+import CustomHead from "@/components/head";
 
  
 export default function Index() {
@@ -63,13 +65,21 @@ export default function Index() {
 
     return (
         <LayoutAdmin> 
+            <CustomHead title="Laundries" />
             <Box sx={{padding: 1, pt: 5}}> 
                 <FinishModal 
                     isOpen={finishModal}
                     handleClose={() => setFinishModal(false)}
                     data={finishData}
-                    handleFinish={async(id) => {
+                    handleFinish={async(id, user_id, type) => {
                         await supabase.from('laundries_table').update({'status': 'done'}).eq('id', id);
+                        await supabase.from('notification')
+                            .insert({
+                                notification_title: 'Ready to Pick Up', 
+                                notification_message: `Your ${type} is ready to pick in Ligao Laundry.`, 
+                                recipent_id: user_id
+                            })
+                          
                         setFinishModal(false)
                     }}
                 />
@@ -111,9 +121,8 @@ export default function Index() {
                                                         <TableCell>{laundry.status}...</TableCell> 
                                                         <TableCell
                                                             onClick={() => {
-                                                                setFinishData(laundry)
-                                                                setFinishModal(true)
-                                                                console.log(laundry)
+                                                                setFinishData(laundry);
+                                                                setFinishModal(true);
                                                             }}
                                                             sx={{
                                                                 '&:hover': {backgroundColor: '#00667E', color: "#FFFFFF", cursor: "pointer"}

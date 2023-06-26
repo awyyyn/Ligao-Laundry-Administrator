@@ -8,6 +8,7 @@ import { Add, ConstructionOutlined, LeakAddRounded } from '@mui/icons-material';
 import { supabase } from '@/supabase';
 import { ConfirmModal, DeleteModal, Snackbar } from '../../components';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
  
 
 export default function Index() {
@@ -150,9 +151,14 @@ export default function Index() {
 
     return (
         <LayoutAdmin>
+            <Head>
+                <title>
+                    Add Laundry
+                </title>
+            </Head>
             <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative' > 
                 <Snackbar isOpen={snackbar.isOpen} message={snackbar.message} color={snackbar.color} duration={snackbar.duration} handleClose={() => setSnackbar(pre => ({...pre, isOpen: false}))} type={snackbar.type} />
-                <Grid item xs={12} sx={{padding: {xs: 2, sm: 5}, width: '100%'}}> 
+                <Grid item xs={12} sx={{padding: {xs: 2, sm: 2}, width: '100%'}}> 
                     <TabContext value={tab}>
                         <Tabs value={tab} onChange={(e, index) => { 
                             setTabs(index)
@@ -161,7 +167,7 @@ export default function Index() {
                             <Tab label="Booked Laundry" value={'1'} />
                         </Tabs>
                         <Divider />
-                        <TabPanel value={'0'} sx={{width: '100%'}}>
+                        <TabPanel value={'0'} sx={{width: 'inherit'}}>
                             <form style={{width: '100%',}} onSubmit={handleSubmit} >
                                 <Stack  width='100%' spacing={2}  >
                                     <Typography>Add Laundry</Typography>

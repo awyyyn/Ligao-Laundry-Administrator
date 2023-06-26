@@ -9,6 +9,7 @@ import { Backdrop, Snackbar } from "@/components";
 import { Formik } from "formik";
 import * as yup from 'yup';
 import Head from "next/head";
+import CustomHead from "@/components/head";
 
 export default function Home () { 
   const router = useRouter();
@@ -53,9 +54,7 @@ export default function Home () {
       alignItems="center"
       justifyContent='center' 
     >
-      <Head>
-        <title>Login</title>
-      </Head>
+      <CustomHead title="Sign in" />
       <Backdrop 
         isOpenBD={isLoading}
       />

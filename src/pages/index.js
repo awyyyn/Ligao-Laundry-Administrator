@@ -8,6 +8,7 @@ import LayoutAdmin from './layouts/adminlayout';
 import Image from 'next/image';
 import heroimg from '/public/images/hero.jpg'
 import theme from '@/customization';
+import CustomHead from '@/components/head';
 
 export default function HomePage() {
   const router = useRouter();
@@ -33,9 +34,7 @@ export default function HomePage() {
 
   return (
     <LayoutAdmin>
-      <Head>
-        <title>Home</title>
-      </Head>
+      <CustomHead title="Dashboard" />
       <Backdrop isOpenBD={isLoadingLogout} />
       <Box height={{xs: '100vh', sm: '100vh', md: '650px'}} width='100%' sx={{ position: 'relative'}}>
         {/* <Typography variant='subtitle1' sx={{position: 'absolute', left: 30, top: 20}}>/ Dashboard</Typography> */}
@@ -50,12 +49,7 @@ export default function HomePage() {
         </div>
       </Box>
       <Box component='main' sx={{p: 2, }}>
-        <Box >   asdasd
-
-
-
-
-
+        <Box >   asdasd 
         asd
         </Box>
       </Box>
