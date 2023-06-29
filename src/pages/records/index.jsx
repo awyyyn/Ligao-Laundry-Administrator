@@ -29,8 +29,8 @@ export default function Records() {
     return (
         <LayoutAdmin>
             <CustomHead title='Records' />
-            <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative' > 
-                <Box marginX={{sm: 0, md: 3}} marginTop={3} marginBottom={10} width='inherit' >
+            <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative'  > 
+                <Box marginX={{sm: 0, md: 3}} marginTop={3}  width='inherit' paddingBottom={5} >
                     <div style={{boxShadow: '0px 2px 8px #00667E30', borderRadius: 5, overflow: 'hidden', marginInline: 10  }}>
                         <TableContainer >
                             <Table stickyHeader  >
@@ -60,7 +60,7 @@ export default function Records() {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        <TablePagination 
+                        <TablePagination  
                             rowsPerPage={rowsPerPage} 
                             component="div"
                             count={records.length}
@@ -72,8 +72,7 @@ export default function Records() {
                             onRowsPerPageChange={(e) => {
                                 setRowsPerPage(e.target.value)
                                 setPage(0);
-                            }}
-                            // rowsPerPage={}
+                            }} 
                         />
                     </div>
                 </Box>
