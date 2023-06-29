@@ -9,7 +9,6 @@ import { Backdrop, Snackbar } from "@/components";
 import { Formik } from "formik";
 import * as yup from 'yup';
 import Head from "next/head";
-import CustomHead from "@/components/head";
 
 export default function Home () { 
   const router = useRouter();
@@ -54,7 +53,9 @@ export default function Home () {
       alignItems="center"
       justifyContent='center' 
     >
-      <CustomHead title="Sign in" />
+      <Head>
+        <title>Login</title>
+      </Head>
       <Backdrop 
         isOpenBD={isLoading}
       />
@@ -156,7 +157,6 @@ export default function Home () {
                     onBlur={handleBlur('password')}
                     helperText={errors.password && errors.password}  
                     name="password"
-                    onKeyUp={(e) => e.key == "Enter" ? handleSubmit() : null}
                     value={values.password}
                   />
                   <PrimaryBTN size="large"  onClick={handleSubmit} disabled={isLoading}>
