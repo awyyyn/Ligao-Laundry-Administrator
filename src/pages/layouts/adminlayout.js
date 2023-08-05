@@ -1,6 +1,6 @@
 import { AppBar, Box, Grid, Stack, Toolbar, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import {   Navbar } from '@/components' 
+import React, { Suspense, useState } from 'react'
+import {   CustomHead, Navbar } from '@/components' 
 import DrawerComponent from '@/components/drawer';
 import { closeDrawer } from '../../slices/uxSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,7 @@ export default function LayoutAdmin({children}) {
     return (
         <Box display='flex' justifyContent=' evenly' width='100vw' position='relative' >
             {/* SIDE NAV */}
+            <CustomHead />
             <Box 
                 component='div' 
                 onClick={() => dispatch(closeDrawer())} 
@@ -36,10 +37,10 @@ export default function LayoutAdmin({children}) {
                 <Grid item sm={2} display={{xs: 'none', sm: 'block', md: 'block'}}>
                     <DrawerComponent width={drawerWidth} variant="permanent" display='none' />  
                 </Grid>
-                <Grid item sm={10} xs={12}  mt='60px' ml={{sm: drawerWidth}} sx={{overflowY: 'hidden'}} onClick={() => dispatch(closeDrawer())}> 
+                <Grid item sm={10} xs={12}  mt='60px' ml={{sm: drawerWidth}} sx={{overflowY: 'hidden'}} onClick={() => dispatch(closeDrawer())}>  
                     <Box sx={{width: '100%', overflowY: 'auto',  }} height={'calc(100vh - 60px)'}>
                         {children}
-                    </Box>
+                    </Box> 
                 </Grid>
             </Grid>
             

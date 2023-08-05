@@ -1,8 +1,9 @@
 import { Box, Button, Modal, Stack, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import PriorityHighIcon from '@mui/icons-material/PriorityHigh';
+import { LoadingButton } from '@mui/lab';
 
-export default function DeleteModal({data, isOpen, handleClose, handleDelete}) {
+export default function DeleteModal({data, isOpen, handleClose, handleDelete, cancelling}) {
     
 
     return (
@@ -28,7 +29,9 @@ export default function DeleteModal({data, isOpen, handleClose, handleDelete}) {
                     </Typography>
                     <Box sx={{display: 'flex', flexDirection: {xs: "column", sm: 'row'}, justifyContent: 'flex-end', gap: 1}}>
                         <Button variant='outlined' sx={{backgroundColor: '#00667E', border: 'none', color: "#FFFFFF", '&:hover': {color: "#00667E"}}} onClick={handleClose}>Cancel</Button>
-                        <Button  variant='outlined' onClick={() => handleDelete(data.id)} sx={{backgroundColor: '#FF0000', border: 'none', color: '#FFFFFF', '&:hover': {color: '#FF0000', borderColor: '#FF0000'}}}>Confirm</Button>
+                        <LoadingButton loading={cancelling}  variant='outlined' onClick={() => handleDelete(data.id)} sx={{backgroundColor: cancelling ? '#FFFFFF' : '#FF0000', border: 'none', color: '#FFFFFF', '&:hover': {color: '#FF0000', borderColor: '#FF0000'}}}>
+                            Confirm
+                        </LoadingButton>
                     </Box>
                 </Stack>
             </Box>
