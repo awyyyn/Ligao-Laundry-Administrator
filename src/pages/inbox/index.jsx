@@ -4,10 +4,7 @@ import { ChevronLeft, ChevronRight,  Inbox,  Send } from '@mui/icons-material'
 import { Fragment, useState } from 'react';
 import { supabase } from '@/supabase';
 import { useEffect } from 'react'; 
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import CustomHead from '@/components/head';
-
+import { useRouter } from 'next/router'; 
 export default function Index() {   
  
     const router = useRouter();
@@ -85,8 +82,7 @@ export default function Index() {
     }
      
     return (
-        <LayoutAdmin>  
-            <CustomHead  title="Inbox" />
+        <LayoutAdmin>   
 
             {/* DDRAAAAAAWEEEEEEEEER */}
             <Drawer 

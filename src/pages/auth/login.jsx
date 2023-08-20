@@ -52,21 +52,19 @@ export default function Home () {
       display="flex"
       alignItems="center"
       justifyContent='center' 
+      minHeight='700px'
     >
+<<<<<<< HEAD
       <Head>
         <title>Login</title>
       </Head>
+=======
+      <CustomHead />
+>>>>>>> 404
       <Backdrop 
         isOpenBD={isLoading}
       />
-      <Snackbar 
-        duration={5000}
-        isOpen={isOpen}
-        handleClose={handleClose}
-        type="error" 
-        color="red"
-        message={message}
-      />
+      <Snackbar />
       <Box width='100%' height='100%' position='absolute' bgcolor='rgba(0, 102, 126, 0.1)' zIndex={1} sx={{backdropFilter: 'blur(100px)'}} />
       <Box   
         borderTop='1px solid rgba(0, 102, 126, 0.1)'
@@ -75,7 +73,10 @@ export default function Home () {
         boxShadow='0px 5px 6px rgba(0, 102, 126, 0.2)'
         position='absolute' 
         width={{xs: '95%', sm: '95%', md: '60%'  }}
-        height='70%'  
+        height='70%'
+        maxHeight='500px'
+        maxWidth={{xs: '500px', sm: '800px'}}
+        sx={{minHeight: '480px'}}  
         display='flex' 
         justifyContent='space-between' 
         zIndex={2} 
@@ -85,9 +86,28 @@ export default function Home () {
             fill
             alt="logo"
             src="/images/adaptive-icon.png"
+            style={{objectFit: 'cover'}}
           />
         </Box>
         <Box width="100%"  display='flex' justifyContent='center' bgcolor="rgba(255, 255, 255, 0.8)" alignItems='center'> 
+          <Box display={{xs: 'block', sm: 'none'}} position='absolute' height='100%' width="100%"> 
+            <Image 
+              alt="logo"
+              src="/images/adaptive-icon.png"
+              loading="lazy"  
+              height={200}
+              width={200}
+
+              style={{
+                borderRadius: '100%',
+                zIndex: -1,
+                position: 'absolute',
+                bottom: -50,
+                right: -20
+              }}
+            />
+
+          </Box>
           <Formik
             initialValues={{
               email: '',

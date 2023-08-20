@@ -1,20 +1,32 @@
+import { toggleSnackBar } from '@/slices/uxSlice';
 import { supabase } from '@/supabase';
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, Divider, Modal, Stack, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 
 export default function ConfirmModal({data, isOpen, handleClose}) {   
     const tempPrice = data && data.service_type == "Gown" ? "" : data && data.price
     const [price, setPrice] = useState(0);
     const [kg, setKg] = useState();
+    const [err, setErr] = useState({
+        priceErr: false,
+        kgErr: false
+    })
     const numberOnly = /^\d+$/;  
-
+    const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
 
     const handleConfirm = async() => { 
         const service_type = data && data.service_type;
         const user_id = data && data.user_id;
         const id = data && data.id
         if(data.service_type == "Gown"){ 
-            if(price == "" || typeof price !== 'number') return alert('Price is required!')
+            if(!price || err.priceErr) {
+                console.log('123')
+                return setErr((prev) => ({...prev, priceErr: true}))
+            }
+            setLoading(true);
             const { data, error } = await supabase.from('laundries_table')
                 .update({
                     price: price,
@@ -25,10 +37,16 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
             /* QUERY FOR GOWN NOTIFICATION */
             await supabase.from('notification')
                 .insert({notification_message: `Gown price is set to ₱ ${price}.`, notification_title: 'Confirm Laundry', recipent_id: user_id})
-
+            
+            setLoading(false)
             if(error) return console.log(error)
+
         }else{ 
-            if(kg == "" || kg == null) return alert('Kilogram is required!')
+            if(kg == "" || kg == null) {
+                return setErr((prev) => ({...prev, kgErr: true }));
+            };
+
+            setLoading(true);
             const { data, error } = await supabase.from('laundries_table')  
                 .update({
                     price: price,
@@ -44,9 +62,24 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
                 .insert({notification_message: `${data.service_type} is ${kg}kg set to ₱ ${price}.`, notification_title: 'Confirm Laundry', recipent_id: user_id})
             
         }
+        dispatch(toggleSnackBar({
+            isOpen: true,
+            message: 'Laundry proceed to next step',
+            type: 'success',
+            color: '#00667E'
+        }))
         setPrice('')
         setKg('')
+        setLoading(false);
         handleClose();
+        setTimeout(() => {
+            dispatch(toggleSnackBar({ 
+                isOpen: false,
+                message: '',
+                type: '',
+                color: ''
+            }))
+        }, 5000)
     }
 
 
@@ -96,19 +129,30 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
                                 value={kg}
                                 type='number'
                                 onChange={(e) => { 
+                                    e.target.value != "" ? setErr((prev) => ({...prev, kgErr: false})) : null
                                     setKg(e.target.value) 
                                     const totalPrice = e.target.value * Number(tempPrice); 
                                     setPrice(totalPrice)
                                 }}
-                                size='small'
-                                sx={{display: data && data.service_type == "Gown" ? 'none' : 'flex'}}
+                                focused
+                                color={err.kgErr ? 'error' : 'primary'}
+                                size='small' 
+                                sx={{
+                                    display: data && data.service_type == "Gown" ? 'none' : 'flex',
+                                }}
                             /> 
                         )
                     }
                     <TextField 
                         label="Price"  
                         value={price}
-                        onChange={(e) => setPrice(e.target.value)} 
+                        focused
+                        color={err.priceErr ? 'error' : 'primary'}
+                        onChange={(e) => {
+                            setPrice(e.target.value)
+                            e.target.value != "" ? setErr((prev) => ({...prev, priceErr: false})) : null;
+                            numberOnly.test(e.target.value) ? setErr((prev) => ({...prev, priceErr: false})) : setErr((prev) => ({...prev, priceErr: true})) ;
+                        }} 
                         size='small'
                         disabled={data && data.service_type == "Gown" ? false : true} 
                     />
@@ -128,12 +172,13 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
                                 '&:hover': { backgroundColor: '#FF0000'},
                                 '&:active': { backgroundColor: '#FF0000'}}}
                         >Cancel</Button>   
-                        <Button  
+                        <LoadingButton  
                             onClick={handleConfirm}
                             fullWidth
+                            loading={loading}
                             variant='contained'
                             sx={{'&:hover': {  cursor: 'pointer'}}}
-                        >Confirm</Button>
+                        >Confirm</LoadingButton>
                     </Box>
                 </Stack>
             </Box>

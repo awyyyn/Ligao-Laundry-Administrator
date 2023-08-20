@@ -3,9 +3,7 @@ import LayoutAdmin from "../layouts/adminlayout";
 import { TabContext, TabPanel } from "@mui/lab";
 import { useEffect, useState } from "react";
 import { supabase } from "@/supabase";
-import { FinishModal } from "@/components";
-import Head from "next/head";
-import CustomHead from "@/components/head";
+import { FinishModal } from "@/components"; 
 
  
 export default function Index() {
@@ -64,9 +62,8 @@ export default function Index() {
     const tblHeadStyle = {backgroundColor: "#00667E", color: '#FFFFFF'}
 
     return (
-        <LayoutAdmin> 
-            <CustomHead title="Laundries" />
-            <Box sx={{padding: 1, pt: 5}}> 
+        <LayoutAdmin>  
+            <Box sx={{padding: 2, }}> 
                 <FinishModal 
                     isOpen={finishModal}
                     handleClose={() => setFinishModal(false)}

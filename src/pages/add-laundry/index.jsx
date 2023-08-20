@@ -7,25 +7,20 @@ import { LoadingButton, TabContext, TabPanel } from '@mui/lab';
 import { Add, ConstructionOutlined, LeakAddRounded } from '@mui/icons-material';
 import { supabase } from '@/supabase';
 import { ConfirmModal, DeleteModal, Snackbar } from '../../components';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
+import { useRouter } from 'next/router'; 
+import { useDispatch } from 'react-redux';
+import { toggleSnackBar } from '@/slices/uxSlice';
  
 
 export default function Index() {
-
+    const dispatch = useDispatch();
     const router = useRouter();
     const [deleteModal, setDeleteModal] = useState(false);
     const [deleteData, setDeleteData] = useState();
     const [confirmModal, setConfirmModal] = useState(false);
     const [confirmData, setConfirmData] = useState();
-
-    const [snackbar, setSnackbar] = useState({
-        isOpen: false,
-        message: '',
-        duration: 0,
-        type: 'success',
-        color: '' 
-    })
+    const [loadingBTN, setLoadingBTN] = useState(false);
+ 
     const [tab, setTabs] = useState('0');
     const [submitting, setIsSubmitting] = useState(false);
     const [name, setName] = useState('');
@@ -43,7 +38,8 @@ export default function Index() {
         addressErr: '',
         typeErr: '',
         numberErr: '',
-        priceErr: ''
+        priceErr: '',
+        kgErr: ''
     });
 
     const [kg, setKg] = useState(1);
@@ -79,6 +75,7 @@ export default function Index() {
         // setIsSubmitting(true);
         // e.preventDefault();
         name == '' ? setErr(pre => ({...pre, nameErr: 'Required Name!'})) : setErr(pre => ({...pre, nameErr: ''}))
+        kg == '' ? setErr(pre => ({...pre, kgErr: 'Required Kg!'})) : setErr(pre => ({...pre, kgErr: ''}))
         address == '' ? setErr(pre => ({...pre, addressErr: 'Required Address'})) : setErr(pre => ({...pre, addressErr: ''}))
         type == '' ? setErr(pre => ({...pre, typeErr: 'Required Service'})) : setErr(pre => ({...pre, typeErr: ''}));
         price == '' || !price ? setErr(pre => ({...pre, priceErr: 'Required Price'})) : setErr(pre => ({...pre, priceErr: ''}));
@@ -126,13 +123,12 @@ export default function Index() {
                 })); 
         }
         
-        setSnackbar(({
-            color: '#00667E',
-            duration: 5000,
+        dispatch(toggleSnackBar({ 
             isOpen: true,
             message: 'Added Successfully',
-            type: 'success'
-        }))
+            type: 'success',
+            color: '#00667E', 
+        }));
         setName('');
         setAddress('');
         setPhone(''),
@@ -140,6 +136,14 @@ export default function Index() {
         setPrice(({price: 0, tempPrice: 0}));
         setType('');
         setIsSubmitting(false);
+        setTimeout(() => {
+            dispatch(toggleSnackBar({ 
+                isOpen: false,
+                message: '',
+                type: '',
+                color: '', 
+            }));
+        }, 5000)
     }
    
     
@@ -150,26 +154,21 @@ export default function Index() {
     const headerTableStyle = { backgroundColor: '#00667E',color: '#FFFFFF' }
 
     return (
-        <LayoutAdmin>
-            <Head>
-                <title>
-                    Add Laundry
-                </title>
-            </Head>
+        <LayoutAdmin> 
             <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative' > 
-                <Snackbar isOpen={snackbar.isOpen} message={snackbar.message} color={snackbar.color} duration={snackbar.duration} handleClose={() => setSnackbar(pre => ({...pre, isOpen: false}))} type={snackbar.type} />
+                <Snackbar />
                 <Grid item xs={12} sx={{padding: {xs: 2, sm: 2}, width: '100%'}}> 
                     <TabContext value={tab}>
                         <Tabs value={tab} onChange={(e, index) => { 
                             setTabs(index)
-                        }} sx={{width: '100%'}}>
+                        }} sx={{width: '100%'}} >
                             <Tab label="Add Laundry" value={'0'} />
                             <Tab label="Booked Laundry" value={'1'} />
                         </Tabs>
                         <Divider />
                         <TabPanel value={'0'} sx={{width: 'inherit'}}>
                             <form style={{width: '100%',}} onSubmit={handleSubmit} >
-                                <Stack  width='100%' spacing={2}  >
+                                <Stack  width='100%' spacing={2}>
                                     <Typography>Add Laundry</Typography>
                                     <TextField 
                                         disabled={submitting}
@@ -264,8 +263,8 @@ export default function Index() {
                                         fullWidth 
                                         disabled={price == '' ? true : false} 
                                         onChange={(e) => {
-                                            if(e.target.textLength < 1){
-                                                setKg(1)
+                                            if(e.target.value == ""){
+                                                setKg(e.target.value)
                                                 setPrice(pre => ({...pre, price: price.tempPrice}))
                                             }else{
                                                 setKg(e.target.value);
@@ -277,7 +276,9 @@ export default function Index() {
                                         min={1}
                                         sx={{display: type == 'Gown' ? 'none' : 'block'}}
                                         inputMode='numeric'
-                                        autoComplete='off' 
+                                        autoComplete='off'  
+                                        error={err.kgErr ? true : false}
+                                        helperText={err.kgErr}
                                         InputProps={{ 
                                             endAdornment: <InputAdornment position='end'>kg</InputAdornment>
                                         }}
@@ -299,7 +300,7 @@ export default function Index() {
                         <TabPanel value={'1'} style={{overflowX: 'auto'}}> 
                             <ConfirmModal 
                                 isOpen={confirmModal}
-                                data={confirmData}
+                                data={confirmData} 
                                 handleClose={() => {
                                     setConfirmModal(false)
                                     setConfirmData('')
@@ -308,15 +309,18 @@ export default function Index() {
                             <DeleteModal 
                                 isOpen={deleteModal} 
                                 data={deleteData} 
+                                cancelling={loadingBTN}
                                 handleClose={() => {
                                     setDeleteModal(false);
                                     setDeleteData('')
                                 }} 
                                 handleDelete={async(id) => {
+                                    setLoadingBTN(true)
                                     const { error } = await supabase.from('laundries_table').delete().eq('id', id);
                                     console.log(error);
                                     setTimeout(() => {    
                                         setDeleteModal(false);
+                                        setLoadingBTN(false)
                                     }, 1000);
                                 }}
                             />
@@ -356,7 +360,7 @@ export default function Index() {
                                                                     setDeleteModal(true)
                                                                 }}
                                                                 sx={{'&:hover': {color: "#FF0000", cursor: 'pointer'}}}
-                                                            >Delete</TableCell>
+                                                            >Cancel</TableCell>
                                                             <TableCell
                                                                 onClick={() => {
                                                                     setConfirmData(laundry);

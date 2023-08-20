@@ -37,3 +37,56 @@ a {
 body{
     overflow: hidden;
 }
+
+.f404 {
+    color: transparent;
+    text-shadow: 
+        0px 5px 10px #FF000060,
+        15px 0px  #ff0000bb 
+    ;
+}
+
+.go-to-dashboard {
+    margin-top: 1rem;
+    display: flex;
+    padding: 0.5rem;
+    transition: all ease-in 0.2s;
+    /* background-color: red; */ 
+}
+.go-to-dashboard:hover {
+    border-radius: 0.5rem;
+    box-shadow: 
+        0px 10px 10px #00000030,
+        10px 0px 10px #00667E30,
+        0px 0px 10px #05c44ed0
+
+        ;
+    transition: all ease-in 0.2s;
+    color: #00667E;
+}
+
+
+.box {
+    position: absolute;
+    border-radius: 10px;
+    min-width: 50px;
+    min-height: 50px;
+    height: 100px;
+    width: 100px; 
+    z-index: -1;
+}
+
+.box1{
+    background-color: #00667E60;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    left: 87%;
+    top: -60px;
+}
+
+.box2{ 
+    background-color: #00667E60;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    left: -18%;
+    z-index: 11;
+    bottom: -65px;
+}

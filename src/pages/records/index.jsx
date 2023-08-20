@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import LayoutAdmin from '../layouts/adminlayout'
 import { Box, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { TableBar } from '@mui/icons-material'
 import { supabase } from '@/supabase'
-import Head from 'next/head'
-import CustomHead from '@/components/head'
+import Head from 'next/head' 
 
 export default function Records() {
     const [records, setRecords] = useState([])
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [isLoading, setIsLoading] = useState(false);
 
     async function getRecords() {
+        setIsLoading(true);
         const { data } = await supabase.from('laundries_table').select().eq('status', 'done');
-
+        setIsLoading(false);
         setRecords(data)
     }
 
@@ -27,12 +28,18 @@ export default function Records() {
      
 
     return (
+<<<<<<< HEAD
         <LayoutAdmin>
             <CustomHead title='Records' />
             <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative'  > 
                 <Box marginX={{sm: 0, md: 3}} marginTop={3}  width='inherit' paddingBottom={5} >
+=======
+        <LayoutAdmin> 
+            <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative' > 
+                <Box marginX={{sm: 0, md: 3}} marginTop={3} marginBottom={5} width='inherit' paddingBottom={8}  >
+>>>>>>> 404
                     <div style={{boxShadow: '0px 2px 8px #00667E30', borderRadius: 5, overflow: 'hidden', marginInline: 10  }}>
-                        <TableContainer >
+                        <TableContainer sx={{maxHeight: '600px'}}  >
                             <Table stickyHeader  >
                                 <TableHead >
                                     <TableRow >
@@ -43,8 +50,21 @@ export default function Records() {
                                         ))}
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
-                                    {
+                                <TableBody> 
+                                    { isLoading ?
+                                        <TableRow>
+                                            <TableCell align='center' sx={{fontWeight: 'semibold'}} colSpan={6}>
+                                                Loading...
+                                            </TableCell>
+                                        </TableRow>
+                                        : 
+                                        records.length < 1 ? 
+                                            <TableRow>
+                                                <TableCell align='center' sx={{fontWeight: 'semibold'}} colSpan={6}>
+                                                    0 record
+                                                </TableCell>
+                                            </TableRow>
+                                        :
                                         records.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage )
                                         .map(record => (
                                             <TableRow key={record.id}>
@@ -56,7 +76,7 @@ export default function Records() {
                                                 <TableCell>{record.date}</TableCell>
                                             </TableRow>
                                         )) 
-                                    }
+                                    } 
                                 </TableBody>
                             </Table>
                         </TableContainer>

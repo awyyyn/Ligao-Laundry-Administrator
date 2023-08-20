@@ -1,14 +1,11 @@
-import Head from 'next/head';
+ 
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
-import { Backdrop } from '@/components';
-import { supabase } from '@/supabase';
+import { Backdrop } from '@/components'; 
 import { Box, Button, Typography } from '@mui/material';
 import LayoutAdmin from './layouts/adminlayout';
 import Image from 'next/image';
-import heroimg from '/public/images/hero.jpg'
-import theme from '@/customization';
-import CustomHead from '@/components/head';
+import heroimg from '/public/images/hero.jpg'  
 
 export default function HomePage() {
   const router = useRouter();
@@ -33,12 +30,11 @@ export default function HomePage() {
   
 
   return (
-    <LayoutAdmin>
-      <CustomHead title="Dashboard" />
+    <LayoutAdmin> 
       <Backdrop isOpenBD={isLoadingLogout} />
-      <Box height={{xs: '100vh', sm: '100vh', md: '650px'}} width='100%' sx={{ position: 'relative'}}>
+      <Box minHeight='600px' height={{xs: '100vh', sm: '100vh'}} width='100%' sx={{ position: 'relative'}}>
         {/* <Typography variant='subtitle1' sx={{position: 'absolute', left: 30, top: 20}}>/ Dashboard</Typography> */}
-        <Image alt='hero' priority fill src={heroimg} style={{position: "absolute", boxShadow: '0px 3px 3px gray', objectFit: 'cover'}} />
+        <Image alt='hero' priority fill  src={heroimg} style={{position: "absolute", boxShadow: '0px 3px 3px gray', objectFit: 'cover'}} />
         <div style={styles.overlay}></div>
         <div style={styles.heroContent}>
           <Typography sx={{mt: 3, fontSize: {xs: '30px', sm: '40px', md: '50px', lg: '70px'}}} color={'white'}>Ligao Laundry</Typography>
@@ -47,12 +43,7 @@ export default function HomePage() {
           </Typography>
           <Button variant='text' sx={{mt: 3, color: 'white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
         </div>
-      </Box>
-      <Box component='main' sx={{p: 2, }}>
-        <Box >   asdasd 
-        asd
-        </Box>
-      </Box>
+      </Box> 
     </LayoutAdmin>
   )
 }

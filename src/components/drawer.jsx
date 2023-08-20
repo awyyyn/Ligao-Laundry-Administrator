@@ -72,7 +72,7 @@ const DrawerComponent = ({width, variant, display}) => {
             open={variant == 'permanent' ? true : drawerState}
             variant={variant} 
         >
-            <List sx={{display: 'flex', flexDirection: 'column', height: '100%', position: 'relative'}}  >
+            <List sx={{display: 'flex', flexDirection: 'column', height: '100%', minHeight: '600px', position: 'relative'}}  >
                 <ListSubheader disableGutters  sx={{/* display: {xs: 'none', sm: 'block'} */}} > 
                     <ListItemText sx={{fontSize: 30, }} >
                         <Typography fontSize={30} textAlign='center' fontWeight='bold' color='#00667E'>Ligao Laundry</Typography> 
