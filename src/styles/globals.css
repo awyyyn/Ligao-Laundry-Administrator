@@ -64,3 +64,29 @@ body{
     transition: all ease-in 0.2s;
     color: #00667E;
 }
+
+
+.box {
+    position: absolute;
+    border-radius: 10px;
+    min-width: 50px;
+    min-height: 50px;
+    height: 100px;
+    width: 100px; 
+    z-index: -1;
+}
+
+.box1{
+    background-color: #00667E60;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    left: 87%;
+    top: -60px;
+}
+
+.box2{ 
+    background-color: #00667E60;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    left: -18%;
+    z-index: 11;
+    bottom: -65px;
+}
