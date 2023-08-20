@@ -27,17 +27,10 @@ export default function Records() {
 
      
 
-    return (
-<<<<<<< HEAD
-        <LayoutAdmin>
-            <CustomHead title='Records' />
-            <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative'  > 
-                <Box marginX={{sm: 0, md: 3}} marginTop={3}  width='inherit' paddingBottom={5} >
-=======
+    return ( 
         <LayoutAdmin> 
             <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative' > 
-                <Box marginX={{sm: 0, md: 3}} marginTop={3} marginBottom={5} width='inherit' paddingBottom={8}  >
->>>>>>> 404
+                <Box marginX={{sm: 0, md: 3}} marginTop={3} marginBottom={5} width='inherit' paddingBottom={8}  > 
                     <div style={{boxShadow: '0px 2px 8px #00667E30', borderRadius: 5, overflow: 'hidden', marginInline: 10  }}>
                         <TableContainer sx={{maxHeight: '600px'}}  >
                             <Table stickyHeader  >

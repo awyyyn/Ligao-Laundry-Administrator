@@ -53,14 +53,7 @@ export default function Home () {
       alignItems="center"
       justifyContent='center' 
       minHeight='700px'
-    >
-<<<<<<< HEAD
-      <Head>
-        <title>Login</title>
-      </Head>
-=======
-      <CustomHead />
->>>>>>> 404
+    >  
       <Backdrop 
         isOpenBD={isLoading}
       />
