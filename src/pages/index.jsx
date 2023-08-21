@@ -38,10 +38,10 @@ export default function HomePage() {
         <div style={styles.overlay}></div>
         <div style={styles.heroContent}>
           <Typography sx={{mt: 3, fontSize: {xs: '30px', sm: '40px', md: '50px', lg: '70px'}}} color={'white'}>Ligao Laundry</Typography>
-          <Typography sx={{mt: 3, fontSize: {xs: '10px', sm: '15px', md: '20px', lg: '25px'}, whiteSpace: 'normal', textIndent: '1.5em'}} color={'white'}>
+          <Typography sx={{mt: 3, textAlign: 'justify', lineHeight: '30px', wordSpacing: '10px', fontSize: {xs: '17px', md: '20px', lg: '25px'}, whiteSpace: 'normal', textIndent: '1.5em'}} color={'white'}>
             Welcome to Ligao Laundry, your trusted destination for impeccable cleanliness. Our cutting-edge technology, eco-friendly practices, and expert staff ensure your garments receive the utmost care. Experience convenience, efficiency, and unmatched quality as we redefine the way you think about laundry.
           </Typography>
-          <Button variant='text' sx={{mt: 3, color: 'white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
+          <Button onClick={() => router.push('/add-laundry')} variant='outlined' sx={{mt: 3, color: 'white',  border: '1px solid white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
         </div>
       </Box> 
     </LayoutAdmin>

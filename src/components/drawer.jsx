@@ -114,9 +114,11 @@ const DrawerComponent = ({width, variant, display}) => {
                     await supabase.auth.signOut();
                     router.push('/auth/login');
                 }}>
-                    <ListItemButton>
+                    <ListItemButton >
                         <ListItemIcon ><Logout sx={{ color: 'red'}} /></ListItemIcon>
-                        <ListItemText>Logout</ListItemText>
+                        <ListItemText style={{color: 'red'}}>
+                            Logout 
+                        </ListItemText>
                     </ListItemButton>
                 </ListItem> 
             </List>
