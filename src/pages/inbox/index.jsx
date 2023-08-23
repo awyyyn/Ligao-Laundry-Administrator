@@ -1,9 +1,8 @@
 import LayoutAdmin from '../layouts/adminlayout';
-import { Box, Grid, IconButton, Typography, Drawer, Stack, Divider, Input, Skeleton,  } from '@mui/material'
+import { Box, Grid, IconButton, Typography, Drawer, Stack, Divider, Input, Skeleton, Autocomplete, TextField,  } from '@mui/material'
 import { ChevronLeft, ChevronRight,  Inbox,  Send } from '@mui/icons-material'
-import { Fragment, useState } from 'react';
-import { supabase } from '@/supabase';
-import { useEffect } from 'react'; 
+import { Fragment, useCallback, useState, useEffect } from 'react';
+import { supabase } from '@/supabase'; 
 import { useRouter } from 'next/router'; 
 export default function Index() {   
  
@@ -15,6 +14,7 @@ export default function Index() {
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [messages, setMessages] = useState([]);
+    const [clients, setClients] = useState([])
     const [err, setErr] = useState(false);
     const [message, setMessage] = useState('');
     const [unread, setUnread] = useState(0);
@@ -37,13 +37,20 @@ export default function Index() {
 
     useEffect(() => {
         getCustomersName();
+        async function getClients() {
+            const { data } = await supabase.from('customers').select('*');
+            setClients(data)
+        }   
+
+        getClients();
+        console.log(clients)
         
     }, [])
 
 
     useEffect(() => {   
 
-
+        console.log("CALLBACK REALTIME")
         const subs = supabase.channel('any')
             .on('postgres_changes', { event: 'INSERT', schema : 'public', table: "message_channel"}, (payload) => { 
                 if(id == payload.new.sender_id){
@@ -109,7 +116,8 @@ export default function Index() {
                             <Skeleton height={70} width='100%' />  
                         </Stack>
                         :
-                        <Stack sx={{marginTop: 'calc(60px + 3rem)'}} direction='column'>
+                        <>
+                            <Stack sx={{marginTop: 'calc(60px + 3rem)'}} direction='column'>
                                 {customers.map((customer) => {  
                                     return(
                                         <Typography 
@@ -133,25 +141,31 @@ export default function Index() {
                                                 getMessages(customer.user_id);
                                             }}
                                         >
-                                            {customer.name}
-                                            {/* <span 
-                                                style={{
-                                                    color: '#ffffff', 
-                                                    backgroundColor: 'rgba(255, 0, 0, 0.8)', 
-                                                    paddingInline: 9, 
-                                                    fontSize: '17px', 
-                                                    borderRadius: '100%', 
-                                                    marginBlock: 'auto',    
-                                                }}
-                                            >   
-                                                {1}
-                                            </span> */} 
+                                            {customer.name} 
                                         </Typography>       
                                     )
-                                }    
-                            )} 
-                        </Stack>
-                    } 
+                                })} 
+                            </Stack> 
+                        <Autocomplete 
+                            options={clients.map(i => ({...i, label: i.name}))}
+                            onChange={(e) => {
+                                const c = clients.filter(a => a.name == e.target.textContent).pop()
+                                if(c){
+                                    setId(c.user_id);
+                                    setName(c.name);                       
+                                    getMessages(c.user_id);
+                                }
+                            }}
+                            renderInput={(p) => <TextField {...p} label="Search..."  />} 
+                            sx={{ 
+                                position: 'absolute', 
+                                left: 0, 
+                                bottom: 0, 
+                                width: '100%'
+                            }}
+                        />
+
+                    </>} 
                 </Box>
             </Drawer> 
              

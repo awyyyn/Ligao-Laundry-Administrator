@@ -90,3 +90,37 @@ body{
     z-index: 11;
     bottom: -65px;
 }
+
+.footer {
+    width: 100%;
+    padding: 1.2rem;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 20px;
+    background-color: #00262e;
+} 
+
+.footer > * {
+    color: #FFFFFF
+}
+.footer__brand { 
+    display: flex;
+    flex-direction: column;
+    row-gap: 5px
+}
+
+.footer__contacts {
+    display: flex;
+    flex-direction: column;
+    row-gap: 12px;
+}
+
+.unathorized {
+    width: 100vw;
+    height: 100vh;
+    min-height: 600px;
+    display: grid;
+    place-content: center;
+}

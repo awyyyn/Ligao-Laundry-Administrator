@@ -6,6 +6,7 @@ import { Box, Button, Typography } from '@mui/material';
 import LayoutAdmin from './layouts/adminlayout';
 import Image from 'next/image';
 import heroimg from '/public/images/hero.jpg'  
+import Footer from '@/components/Footer';
 
 export default function HomePage() {
   const router = useRouter();
@@ -44,6 +45,7 @@ export default function HomePage() {
           <Button onClick={() => router.push('/add-laundry')} variant='outlined' sx={{mt: 3, color: 'white',  border: '1px solid white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
         </div>
       </Box> 
+      <Footer />
     </LayoutAdmin>
   )
 }

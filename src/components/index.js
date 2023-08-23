@@ -18,7 +18,7 @@ export { default as Drawer } from './drawer.jsx'
 export { default as DeleteModal } from './deleteModal.jsx';
 export { default as ConfirmModal } from './confirmModal.jsx';
 export { default as FinishModal } from './finishModal.jsx';
-export { default as CustomHead } from './head.jsx'
+export { default as CustomHead } from './head.jsx';
 
 // export { 
 //     Input, 

@@ -9,7 +9,7 @@ export default function LayoutAdmin({children}) {
     const [isOpen, setIsOpen] = useState(false);
     const drawerWidth = '250px' 
     const { drawerState } = useSelector(state => state.ux)
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     return (
         <Box display='flex' justifyContent=' evenly' width='100vw' position='relative' >

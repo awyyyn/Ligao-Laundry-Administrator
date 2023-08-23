@@ -1,16 +1,15 @@
-'use client' 
-import { Box, Button, Grid, TextField, Typography } from "@mui/material"
-
-import Image from 'next/image'
-import { useState } from "react"
+"use client"
 import { useRouter } from 'next/router'
+import { Box, Button, Grid, TextField, Typography } from "@mui/material"
+import Image from 'next/image'
+import { useEffect, useState } from "react"
 
 export default function ResetPassword() { 
     let token;
     const router = useRouter();
+    
     token = router.asPath.split('=')[1]
-    token = token?.split('&')[0]
-    console.log(router.asPath) 
+    token = token?.split('&')[0] 
     
 
     const [password, setPassword] = useState("");
@@ -20,9 +19,12 @@ export default function ResetPassword() {
         reTypeErr: ""
     })
 
-    // if(!token && !token?.includes("token_type=bearer&type=recovery") || token?.includes("unauthorized_client")){
-    //     return <h1>unauthorized_client</h1>
-    // }
+    useEffect(() => {
+        if(!token && !token?.includes("token_type=bearer&type=recovery") || token?.includes("unauthorized_client")){
+            router.push("/")
+            return 
+        }
+    }, [])
 
     return (
         <Grid container position={'relative'} alignContent={'center'} justifyContent={'center'} sx={{height: '100vh', width: '100%',  overflowY: 'hidden'}}>
