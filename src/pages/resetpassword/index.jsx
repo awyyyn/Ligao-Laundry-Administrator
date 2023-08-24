@@ -1,18 +1,20 @@
 "use client"
 import { useRouter } from 'next/router'
-import { Box, Button, Grid, TextField, Typography } from "@mui/material"
+import { Alert, Box, Button, Grid, Snackbar, TextField, Typography } from "@mui/material"
 import Image from 'next/image'
 import { useEffect, useState } from "react"
+import { supabase } from '@/supabase'
+import { Backdrop } from '@/components'
 
-export default function ResetPassword() { 
-    let token;
+export default function ResetPassword() {  
     const router = useRouter();
+     
     
-    token = router.asPath.split('=')[1]
-    token = token?.split('&')[0] 
-    
-
+    const [errr, setErrr] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("");
     const [password, setPassword] = useState("");
+    const [initialLoading, setInitialLoading] = useState(true)
+    const [loading, setLoading] = useState(false);
     const [reTypePass, setReTypePass] = useState("");
     const [err, setErr] = useState({
         passErr: "",
@@ -20,14 +22,36 @@ export default function ResetPassword() {
     })
 
     useEffect(() => {
-        if(!token && !token?.includes("token_type=bearer&type=recovery") || token?.includes("unauthorized_client")){
-            router.push("/")
+
+        const token = localStorage.getItem('sb-yuvybxqtufuikextocdz-auth-token');
+
+        if(!token){
+            router.push('/')
             return 
         }
-    }, [])
+        setInitialLoading(false)
+        // supabase.auth.onAuthStateChange(async (event, session) => {
+        //     if (event == "PASSWORD_RECOVERY") {
+        //     const newPassword = prompt("What would you like your new password to be?");
+        //     const { data, error } = await supabase.auth
+        //         .updateUser({ password: newPassword })
 
+        //         if (data) alert("Password updated successfully!")
+        //         if (error) alert("There was an error updating your password.")
+        //     }
+        // })
+    }, []);
+
+
+    if(initialLoading) return <Backdrop isOpenBD={initialLoading} />
+ 
     return (
         <Grid container position={'relative'} alignContent={'center'} justifyContent={'center'} sx={{height: '100vh', width: '100%',  overflowY: 'hidden'}}>
+            <Snackbar open={errr}  autoHideDuration={5000} anchorOrigin={{horizontal: 'right', vertical: 'top'}} >
+                <Alert   severity='error' >
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
             <Grid item position={'relative'} xs={10} sm={8} md={4} lg={3}  >
                 <Box  
                     rowGap={{xs: 4, md: 2}} 
@@ -60,9 +84,12 @@ export default function ResetPassword() {
                             if(e.target.value.length < 6 || e.target.value == ""){
                                 if(e.target.value == ""){
                                     setErr((prev) => ({...prev, passErr: "Password can't be empty"}))
+                                }else if(e.target.value != reTypePass){
+                                    setErr(prev => ({...prev, reTypeErr: "Password does not match"}))
                                 }else{
                                     setErr((prev) => ({...prev, passErr: "Password  must be at least 6 characters"}))
                                 }
+                                
                             }else{
                                 setErr((prev) => ({...prev, passErr: ""}))
                                 if(e.target.value == reTypePass) setErr(prev => ({...prev, reTypeErr: ""}))
@@ -90,8 +117,27 @@ export default function ResetPassword() {
                         }}
                         
                     />
-                    <Button variant="contained" disabled={err.reTypeErr}>
-                        Reset
+                    <Button 
+                        variant="contained" 
+                        disabled={err.reTypeErr || loading ? true : false} 
+                        onClick={async() => {
+                            setLoading(true);
+                            const { data, error } = await supabase.auth
+                            .updateUser({ password: password });
+                            if(error){
+                                setErrorMessage(error.message)
+                                setLoading(false);
+                                setErrr(true)
+                                setTimeout(() => {
+                                    setErrr(false)
+                                }, 5000)
+                                return console.log(error)
+                            }
+                            localStorage.removeItem('sb-yuvybxqtufuikextocdz-auth-token')
+                            router.push('/success')
+                        }}
+                    >
+                        {loading ? 'Loading...' : 'Reset'}
                     </Button>
                 </Box>
                 <Box display={{xs: 'none', md: 'block'}} className="box box1"></Box>
