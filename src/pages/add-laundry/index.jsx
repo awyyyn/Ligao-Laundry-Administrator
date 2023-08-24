@@ -113,14 +113,14 @@ export default function Index() {
 
         
         if(error){ 
-                setIsSubmitting(false);
-                return setSnackbar(({
-                    color: '#ff0000',
-                    duration: 5000,
-                    isOpen: true,
-                    message: "Something went wrong",
-                    type: 'error'       
-                })); 
+            setIsSubmitting(false);
+            return setSnackbar(({
+                color: '#ff0000',
+                duration: 5000,
+                isOpen: true,
+                message: "Something went wrong",
+                type: 'error'       
+            })); 
         }
         
         dispatch(toggleSnackBar({ 

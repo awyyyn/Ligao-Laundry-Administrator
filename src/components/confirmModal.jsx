@@ -59,7 +59,7 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
             
             /* QUERY FOR NOTIFICATION OF LAUNDRIES EXCEPT FOR TYPE GOWN */ 
             await supabase.from('notification')
-                .insert({notification_message: `${data.service_type} is ${kg}kg set to ₱ ${price}.`, notification_title: 'Confirm Laundry', recipent_id: user_id})
+                .insert({notification_message: `${data[0].service_type} weighted ${kg}kg amounted to ₱ ${price}.`, notification_title: 'Laundry Confirmed', recipent_id: user_id})
             
         }
         dispatch(toggleSnackBar({
