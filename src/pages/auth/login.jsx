@@ -130,7 +130,7 @@ export default function Home () {
               if(adminError?.message){
                 setIsLoading(false);
                 setIsOpen(true)
-                return setIsMessage(adminError.message) 
+                return setIsMessage(adminError.message);
               }
               console.log(adminData)
               router.push('/'); 
