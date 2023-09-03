@@ -34,24 +34,22 @@ export default function Index() {
         setMessages(data);
     } 
     
+    async function getClients() {
+        const { data } = await supabase.from('customers').select('*');
+        setClients(data)
+    }   
 
     useEffect(() => {
         getCustomersName();
-        async function getClients() {
-            const { data } = await supabase.from('customers').select('*');
-            setClients(data)
-        }   
-
-        getClients();
-        console.log(clients)
+        
+        getClients(); 
         
     }, [])
 
 
     useEffect(() => {   
-
-        console.log("CALLBACK REALTIME")
-        const subs = supabase.channel('any')
+  
+        const subs = supabase.channel('any') 
             .on('postgres_changes', { event: 'INSERT', schema : 'public', table: "message_channel"}, (payload) => { 
                 if(id == payload.new.sender_id){
                     console.log("ADD MESSAGE")
@@ -87,6 +85,7 @@ export default function Index() {
         // console.log(error?.details)
         setMessage('');
     }
+ 
      
     return (
         <LayoutAdmin>   
@@ -118,27 +117,31 @@ export default function Index() {
                         :
                         <>
                             <Stack sx={{marginTop: 'calc(60px + 3rem)'}} direction='column'>
-                                {customers.map((customer) => {  
+                                {customers.map((customer, i) => {  
+ 
+
                                     return(
                                         <Typography 
                                             fontSize='1.3rem' 
-                                            key={customer.user_id} 
+                                            key={i}  
                                             bgcolor={name == customer.name ? 'rgba(0, 41, 51, 0.1)' : ''}
                                             sx={{
                                                 cursor: 'pointer', 
                                                 '&:hover': {
                                                     bgcolor: 'rgba(0, 41, 51, 0.1)'
                                                 }, 
+                                                bgcolor: customer.inbox ? '#00667E30' : 'transparent',
                                                 paddingX: 1, 
                                                 paddingY: 1,  
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
-                                                fontWeight: '400'
+                                                fontWeight: customer.inbox ? '' : '400'
                                             }} 
-                                            onClick={() => {
+                                            onClick={async() => {
                                                 setId(customer.user_id);
                                                 setName(customer.name);                       
                                                 getMessages(customer.user_id);
+                                                await supabase.from('customers').update({inbox: 0}).eq('user_id', customer.user_id);
                                             }}
                                         >
                                             {customer.name} 
@@ -217,18 +220,18 @@ export default function Index() {
         
                             <Box sx={{height: '90%', overflow: {xs: 'auto', sm: 'hidden'}}}>
                                 <Stack  sx={{overflow: 'auto', p: 1, height: '100%', display: 'flex', flexDirection: 'column-reverse', }}>
-                                    {messages.map((message) => {
+                                    {messages?.map((message, i) => {
 
                                         return( 
                                             <Box 
-                                                key={message.id}  
+                                                key={i}  
                                                 display="flex"
                                                 width='100%' 
                                                 marginY={2}
                                                 sx={{justifyContent: message.name ? 'flex-start' : 'flex-end'}}
                                                 >
                                                 <Typography 
-                                                    key={message.id}  
+                                                    key={i}  
                                                     sx={{
                                                         px: 2, 
                                                         py: 1, 

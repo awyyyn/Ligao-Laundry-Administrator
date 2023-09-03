@@ -91,10 +91,9 @@ const DrawerComponent = ({width, variant, display}) => {
                             priority
                             alt="logo"
                             src='/images/icon.png'
-                        />
+                        /> 
                     </Box>
-                </ListI>
-                <Divider />
+                </ListI> 
                 {links.map((link) => {
                     return(
                         <Link key={link.path} href={link.path} >

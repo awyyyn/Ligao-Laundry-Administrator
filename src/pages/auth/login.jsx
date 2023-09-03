@@ -5,10 +5,11 @@ import { useRouter } from "next/router";
 import theme, { PrimaryBTN } from "@/customization";
 import { Box, Stack, TextField, Typography } from "@mui/material";
 import Image from "next/image";
-import { Backdrop, Snackbar } from "@/components";
+import { Backdrop, CustomHead, Snackbar } from "@/components";
 import { Formik } from "formik";
-import * as yup from 'yup';
+import * as yup from 'yup'; 
 import Head from "next/head";
+import { Co2Sharp } from "@mui/icons-material";
 
 export default function Home () { 
   const router = useRouter();
@@ -54,9 +55,12 @@ export default function Home () {
       justifyContent='center' 
       minHeight='700px'
     >  
+
+      <CustomHead />
       <Backdrop 
         isOpenBD={isLoading}
       />
+
       <Snackbar />
       <Box width='100%' height='100%' position='absolute' bgcolor='rgba(0, 102, 126, 0.1)' zIndex={1} sx={{backdropFilter: 'blur(100px)'}} />
       <Box   
@@ -127,9 +131,13 @@ export default function Home () {
                 password: values.password
               });
 
+              console.log("ERROR", adminError)
+              console.log("DATA", adminData)
+
               if(adminError?.message){
                 setIsLoading(false);
                 setIsOpen(true)
+
                 return setIsMessage(adminError.message);
               }
               console.log(adminData)
