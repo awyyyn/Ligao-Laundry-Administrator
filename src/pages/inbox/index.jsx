@@ -26,8 +26,15 @@ export default function Index() {
     async function getCustomersName () {    
         const { data } = await supabase.from('customers').select('*'); 
         setCustomers(data);
-        setSkeleton(!skeleton);
+        setSkeleton(false);
     }   
+
+    const handleCustomerMessage = async(id, name) => { 
+        setId(id);
+        setName(name);                       
+        getMessages(id);
+        await supabase.from('customers').update({inbox: 0}).eq('user_id', id);
+    }
     
     async function getMessages(id) {
         const { data } = await supabase.from('message_channel').select().eq('sender_id', id).order('created_at', {ascending: false});
@@ -38,27 +45,33 @@ export default function Index() {
         const { data } = await supabase.from('customers').select('*');
         setClients(data)
     }   
-
-    useEffect(() => {
-        getCustomersName();
-        
-        getClients(); 
-        
-    }, [])
-
-
+ 
     useEffect(() => {   
-  
+        
+        console.log('asd')
+
+        if(localStorage.getItem('id')){
+            const id = localStorage.getItem('id');
+            const name = localStorage.getItem('name');
+            handleCustomerMessage(id, name)
+        }
+
+        getCustomersName(); 
+        getClients(); 
+
         const subs = supabase.channel('any') 
             .on('postgres_changes', { event: 'INSERT', schema : 'public', table: "message_channel"}, (payload) => { 
-                if(id == payload.new.sender_id){
-                    console.log("ADD MESSAGE")
+                if(id == payload.new.sender_id){ 
                     setMessages(pre => ([payload.new, ...pre]));
                 }
                 // console.log("SENDER_ID", payload.new.sender_id)
             }).subscribe(); 
 
-        return () => supabase.removeChannel(subs);
+        return () => {
+            supabase.removeChannel(subs)
+            localStorage.setItem('id', "");
+            localStorage.setItem('name', "");
+        }
 
     }, [id]);
 
@@ -137,12 +150,7 @@ export default function Index() {
                                                 justifyContent: 'space-between',
                                                 fontWeight: customer.inbox ? '' : '400'
                                             }} 
-                                            onClick={async() => {
-                                                setId(customer.user_id);
-                                                setName(customer.name);                       
-                                                getMessages(customer.user_id);
-                                                await supabase.from('customers').update({inbox: 0}).eq('user_id', customer.user_id);
-                                            }}
+                                            onClick={() => handleCustomerMessage(customer.user_id, customer.name)}
                                         >
                                             {customer.name} 
                                         </Typography>       

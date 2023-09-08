@@ -57,6 +57,12 @@ export default function Index() {
 
     /* REALTIME UPDATE */
     useEffect(() => {
+
+        if(localStorage.getItem('tab')){
+            setTabs('1')
+        }
+
+        getBooked();
         const subscription = supabase.channel('any').on('postgres_changes',  {event: "*", schema: 'public', table: 'laundries_table'}, (payload) => {
            
             getBooked();
@@ -65,10 +71,7 @@ export default function Index() {
 
         return () => supabase.removeChannel(subscription)
     }, [])
- 
-    useEffect(() => {
-        getBooked();
-    }, [])
+  
 
     /* FORM VALIDATION */
     const validation = () => {

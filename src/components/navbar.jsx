@@ -27,13 +27,12 @@ export default function Navbar({width}) {
             console.log(error)
             return 
         }
-        setNotifications(data)
+        setNotifications(data.reverse())
         console.log("NOTIFICATIOn", data)
     }
 
     async function getUnreadNotifications() {
-        const { data } = await supabase.from('notification').select().eq('is_read', false);
-
+        const { data } = await supabase.from('notification').select().eq('is_read', false); 
         setUnreadNotification(data.length)
     }
 
@@ -109,8 +108,15 @@ export default function Navbar({width}) {
                                             is_read: true
                                         }).eq('id', item.id)
                                         if(item.notification_title.includes('message')){ 
-                                            navigate.push('/inbox')
+                                            localStorage.setItem('id', item.sent_by_id)
+                                            localStorage.setItem('name', item.sent_by)  
+                                            if(router.pathname == "/inbox"){
+                                                router.reload()
+                                            }else{
+                                                navigate.push('/inbox')
+                                            }
                                         }else{
+                                            localStorage.setItem('tab', 1);
                                             navigate.push('/add-laundry')
                                         }
                                     }}
