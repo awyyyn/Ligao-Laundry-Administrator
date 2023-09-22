@@ -83,6 +83,13 @@ body{
     top: -60px;
 }
 
+.table-header {
+    background-color: #00667E;
+    color: #FFFFFF;
+    font-weight: 700;
+    font-size: 16px
+}
+
 .box2{ 
     background-color: #00667E60;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);

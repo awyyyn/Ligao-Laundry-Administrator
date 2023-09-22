@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import { Backdrop } from '@/components'; 
-import { Box, Button, Grid, Paper, Skeleton, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, Skeleton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import LayoutAdmin from './layouts/adminlayout';
 import Image from 'next/image';
 import heroimg from '/public/images/hero.jpg'  
@@ -17,23 +17,29 @@ export default function HomePage() {
   const [isLoadingLogout, setisLoadingLogout] = useState(false);
   const [loading, setLoading] = useState(true)
   const [data, setData] = useState({
-    clients: "",
+    clients: [],
+    totalClients: "",
     pending: "",
-    allLaundries: "" 
+    allLaundries: "", 
+    doneLaundries: ""
   })
 
   const getAllData = async function() {
-    const data = await supabase.from('customers').select("*", {count: 'exact', head: true});
-    const { data: pending } = await supabase.from('laundries_table').select('status')
+    const { data, count } = await supabase.from('customers').select();
+    const { data: clients } = await supabase.from('laundries_table').select('status')
 
- 
-    const pendingData = pending.filter(i => i.status == "washing").length
+    
+    console.log(data) 
+    const pendingData = clients.filter(i => i.status == "washing").length
+    const doneData = clients.filter(i => i.status == "done").length
 
     setData(prev => ({
       ...prev,
-      clients: data.count,
-      allLaundries: pending.length,
-      pending: pendingData
+      totalClients: data.length,
+      allLaundries: clients.length,
+      doneLaundries: doneData,
+      pending: pendingData,
+      clients: data
     }));
     setLoading(false);
   }
@@ -47,8 +53,7 @@ export default function HomePage() {
       router.push('/auth/login')
     }else{
       setIsLoading(false);
-    }
-
+    } 
   }, [router]);
   
 
@@ -70,29 +75,10 @@ export default function HomePage() {
           <Button onClick={() => router.push('/add-laundry')} variant='outlined' sx={{mt: 3, color: 'white',  border: '1px solid white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
         </div>
       </Box> 
-      <Grid container rowSpacing={5} justifyContent='space-around' overflow='scroll' alignItems={'flex-start'} style={{height: "90vh", minHeight: '600px'}} paddingY={10}>
-        <Grid item xs={10} sm={5} md={3}>
-          <Paper elevation={3} style={{padding: 15}}>
-          {loading ? 
-            <>
-              <Stack justifyContent='space-between' mb={2} direction='row'>
-                <Skeleton width="80%" height='40px' variant='rectangular' />
-                <Skeleton variant='circular' height='40px' width='40px' />
-              </Stack>
-              <Skeleton width="100%" height="60px" variant='rectangular'  />
-            </> :
-            <>
-              <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-                <Typography>Pending Laundries</Typography>
-                  <LocalLaundryServiceIcon  style={{fontSize: '50px'}} />
-              </Stack>
-              <Typography variant="h3">{data.pending} <span style={{color: 'gray', fontSize: '30px'}}>/ {data.allLaundries}</span></Typography>
-            </>
-          }
-          </Paper>
-        </Grid>
-        <Grid item xs={10} sm={5} md={3}>
-          <Paper elevation={3} style={{padding: 15}}>
+      <Box style={{ minHeight: '600px'}} paddingY={10} rowGap={10}>
+        <Grid container justifyContent='space-around' rowSpacing={5}>
+          <Grid item xs={10} sm={5} md={3}>
+            <Paper elevation={5} style={{padding: 15}}>
             {loading ? 
               <>
                 <Stack justifyContent='space-between' mb={2} direction='row'>
@@ -103,35 +89,99 @@ export default function HomePage() {
               </> :
               <>
                 <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-                  <Typography>Total Customers</Typography>
-                  <GroupIcon  style={{fontSize: '50px'}} />
+                  <Typography>Pending Laundries</Typography>
+                    <LocalLaundryServiceIcon  style={{fontSize: '50px'}} />
                 </Stack>
-                <Typography variant="h3">{data.clients}</Typography>
+                <Typography variant="h3">{data.pending} <span style={{color: 'gray', fontSize: '30px'}}>/ {data.allLaundries}</span></Typography>
               </>
             }
-          </Paper>
+            </Paper>
+          </Grid>
+          <Grid item xs={10} sm={5} md={3}>
+            <Paper elevation={5} style={{padding: 15}}>
+              {loading ? 
+                <>
+                  <Stack justifyContent='space-between' mb={2} direction='row'>
+                    <Skeleton width="80%" height='40px' variant='rectangular' />
+                    <Skeleton variant='circular' height='40px' width='40px' />
+                  </Stack>
+                  <Skeleton width="100%" height="60px" variant='rectangular'  />
+                </> :
+                <>
+                  <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                    <Typography>Laundry Completed</Typography>
+                    <GroupIcon  style={{fontSize: '50px'}} />
+                  </Stack>
+                  <Typography variant="h3">{data.doneLaundries}</Typography>
+                </>
+              }
+            </Paper>
+          </Grid>
+          <Grid item xs={10} sm={5} md={3}>
+            <Paper elevation={5} style={{padding: 15}}>
+              {loading ? 
+                <>
+                  <Stack justifyContent='space-between' mb={2} direction='row'>
+                    <Skeleton width="80%" height='40px' variant='rectangular' />
+                    <Skeleton variant='circular' height='40px' width='40px' />
+                  </Stack>
+                  <Skeleton width="100%" height="60px" variant='rectangular'  />
+                </> :
+                <>
+                  <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
+                    <Typography>Total Customers</Typography>
+                    <LocalLaundryServiceIcon  style={{fontSize: '50px'}} />
+                  </Stack>
+                  <Typography variant="h3">{data.totalClients}</Typography>
+                </>
+              }
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={10} sm={5} md={3}>
-          <Paper elevation={3} style={{padding: 15}}>
-            {loading ? 
-              <>
-                <Stack justifyContent='space-between' mb={2} direction='row'>
-                  <Skeleton width="80%" height='40px' variant='rectangular' />
-                  <Skeleton variant='circular' height='40px' width='40px' />
-                </Stack>
-                <Skeleton width="100%" height="60px" variant='rectangular'  />
-              </> :
-              <>
-                <Stack direction={'row'} alignItems={'center'} justifyContent={'space-between'}>
-                  <Typography>Total Customers</Typography>
-                  <LocalLaundryServiceIcon  style={{fontSize: '50px'}} />
-                </Stack>
-                <Typography variant="h3">{data.clients}</Typography>
-              </>
-            }
+        
+        <Box  paddingX={{xs: 3, md: 6}} mt={5}>
+          <Typography sx={{marginBottom: 3, marginTop: 5}} variant="h3">Customers</Typography>
+          <Paper overflow="hidden">
+            <TableContainer sx={{maxHeight: 500}}>
+              <Table stickyHeader>
+                <TableHead >
+                  <TableRow >
+                    <TableCell className="table-header">#</TableCell>
+                    <TableCell className="table-header">Name</TableCell>
+                    <TableCell className="table-header">Contact</TableCell>
+                    <TableCell className="table-header">Address</TableCell>
+                    <TableCell className="table-header">Email</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {loading ? 
+                    <>
+                      {[0, 1, 2, 3, 4, 5].map(i => (
+                        <TableRow key={i} >
+                          <TableCell colSpan={5} padding={0}>
+                            <Skeleton width="100%" height='50px' />
+                          </TableCell>
+                        </TableRow>
+                      ))}  
+                    </> :
+                    data.clients.map((client, i) => (
+                      <TableRow key={client?.user_id}>
+                        <TableCell>{i + 1}</TableCell>
+                        <TableCell sx={{minWidth: 200, textTransform: "capitalize"}}>{client?.name}</TableCell>
+                        <TableCell>{client?.phone}</TableCell>
+                        <TableCell sx={{minWidth: 200}}>{client?.address}</TableCell>
+                        <TableCell>{client?.email ? client.email : ""}</TableCell>
+                        {/* <TableCell>{new Date(client.created_at)}</TableCell> */}
+                      </TableRow>
+                    ))
+                  }
+                   
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Paper>
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
       <Footer />
     </LayoutAdmin>
   )

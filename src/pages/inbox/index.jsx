@@ -69,8 +69,8 @@ export default function Index() {
 
         return () => {
             supabase.removeChannel(subs)
-            localStorage.setItem('id', "");
-            localStorage.setItem('name', "");
+            localStorage.removeItem('id');
+            localStorage.removeItem('name');
         }
 
     }, [id]);
@@ -145,6 +145,7 @@ export default function Index() {
                                                 }, 
                                                 bgcolor: customer.inbox ? '#00667E30' : 'transparent',
                                                 paddingX: 1, 
+                                                textTransform: 'capitalize',
                                                 paddingY: 1,  
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
@@ -221,15 +222,14 @@ export default function Index() {
                             item 
                             xs={12} 
                             sx={{
-                                height: {xs: 'calc(100% - 60px - 15%)', sm: 'calc(100% - 60px)'},
+                                height: {xs: 'calc(100% - 60px )', sm: 'calc(100% - 60px)'},
                                 position: 'relative',   
                             }}
                         >     
         
                             <Box sx={{height: '90%', overflow: {xs: 'auto', sm: 'hidden'}}}>
                                 <Stack  sx={{overflow: 'auto', p: 1, height: '100%', display: 'flex', flexDirection: 'column-reverse', }}>
-                                    {messages?.map((message, i) => {
-
+                                    {messages?.map((message, i) => { 
                                         return( 
                                             <Box 
                                                 key={i}  

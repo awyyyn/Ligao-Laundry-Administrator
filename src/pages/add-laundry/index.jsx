@@ -69,7 +69,10 @@ export default function Index() {
             console.log(payload.new)
         }).subscribe()
 
-        return () => supabase.removeChannel(subscription)
+        return () => {
+            supabase.removeChannel(subscription)
+            localStorage.removeItem('tab')
+        }
     }, [])
   
 
