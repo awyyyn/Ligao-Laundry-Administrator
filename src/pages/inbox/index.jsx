@@ -195,7 +195,7 @@ export default function Index() {
                         }}
                         
                     >
-                        <Typography sx={{textOverflow: 'ellipsis', minWidth:  '100', overflow: 'hidden', whiteSpace: 'nowrap'}}>
+                        <Typography sx={{textOverflow: 'ellipsis', textTransform: 'capitalize', minWidth:  '100', overflow: 'hidden', whiteSpace: 'nowrap'}}>
                             {name}
                         </Typography>
                         <IconButton onClick={() => setDrawerState(!drawerState)}>

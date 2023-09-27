@@ -72,7 +72,7 @@ export default function Index() {
                         await supabase.from('laundries_table').update({'status': 'done'}).eq('id', id);
                         await supabase.from('notification')
                             .insert({
-                                notification_title: 'Laundry is Ready to Pick Up', 
+                                notification_title: 'ready', 
                                 notification_message: `Your ${type} is ready to pick in Ligao Laundry.`, 
                                 recipent_id: user_id
                             })

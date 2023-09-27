@@ -200,7 +200,7 @@ export const styles = {
     p: 10,
     position: 'absolute',
     top: '15%',
-    left: '10%' ,
+    left: '10%' , 
     width: '80%',
   }
 }
