@@ -1,7 +1,8 @@
+import { LoadingButton } from '@mui/lab'
 import { Box, Button, Divider, Modal, Stack, Typography } from '@mui/material'
 import React from 'react'
 
-export default function finishModal({handleClose, handleFinish, isOpen, data}) {
+export default function finishModal({handleClose, handleFinish, isOpen, data, loadingFinish}) {
     
     
     return (
@@ -39,12 +40,15 @@ export default function finishModal({handleClose, handleFinish, isOpen, data}) {
                                 '&:hover': { backgroundColor: '#FF0000'},
                                 '&:active': { backgroundColor: '#FF0000'}}}
                         >Cancel</Button>   
-                        <Button  
+                        <LoadingButton  
                             onClick={() => handleFinish(data.id, data.user_id, data.service_type)}
                             fullWidth
                             variant='contained'
                             sx={{'&:hover': {  cursor: 'pointer'}}}
-                        >Finish</Button>
+                            loading={loadingFinish}
+                            loadingIndicator="Updating status..."
+                            
+                        >Finish</LoadingButton>
                     </Box>
                 </Stack>                  
             </Box>

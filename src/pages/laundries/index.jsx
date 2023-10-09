@@ -16,6 +16,7 @@ export default function Index() {
     });
     const [finishModal, setFinishModal] = useState(false);
     const [finishData, setFinishData] = useState();
+    const [loadingFinish, setLoadingFinish] = useState(false);
     const [bookedData, setBookedData] = useState({ 
         length: 0,
         data: []
@@ -68,16 +69,19 @@ export default function Index() {
                     isOpen={finishModal}
                     handleClose={() => setFinishModal(false)}
                     data={finishData}
+                    loadingFinish={loadingFinish}
                     handleFinish={async(id, user_id, type) => {
+                        setLoadingFinish(true)
                         await supabase.from('laundries_table').update({'status': 'done'}).eq('id', id);
                         await supabase.from('notification')
-                            .insert({
-                                notification_title: 'ready', 
+                        .insert({
+                            notification_title: 'Ready to Pick up', 
                                 notification_message: `Your ${type} is ready to pick in Ligao Laundry.`, 
                                 recipent_id: user_id
                             })
-                          
+                            
                         setFinishModal(false)
+                        setLoadingFinish(false)
                     }}
                 />
                 <TabContext value={tab}>
