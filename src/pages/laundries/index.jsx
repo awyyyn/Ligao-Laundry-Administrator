@@ -112,7 +112,7 @@ export default function Index() {
                                             ) : (
                                                 walkinData.data.map(laundry => (
                                                     <TableRow key={laundry.id}>
-                                                        <TableCell>{laundry.name}</TableCell>
+                                                        <TableCell style={{textTransform: 'capitalize'}}>{laundry.name}</TableCell>
                                                         <TableCell>{laundry.service_type}</TableCell>
                                                         <TableCell>₱  {laundry.price}</TableCell> 
                                                         <TableCell>{laundry.status}...</TableCell> 
@@ -155,7 +155,7 @@ export default function Index() {
                                     ) : (
                                         bookedData.data.map(laundry => (
                                             <TableRow key={laundry.id}>
-                                                <TableCell>{laundry.name}</TableCell>
+                                                <TableCell style={{textTransform: 'capitalize'}}>{laundry.name}</TableCell>
                                                 <TableCell>{laundry.service_type}</TableCell>
                                                 <TableCell>₱  {laundry.price}</TableCell> 
                                                 <TableCell>{laundry.status}...</TableCell> 

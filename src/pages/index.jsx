@@ -169,7 +169,7 @@ export default function HomePage() {
                         <TableCell>{i + 1}</TableCell>
                         <TableCell sx={{minWidth: 200, textTransform: "capitalize"}}>{client?.name}</TableCell>
                         <TableCell>{client?.phone}</TableCell>
-                        <TableCell sx={{minWidth: 200}}>{client?.address}</TableCell>
+                        <TableCell sx={{minWidth: 200, textTransform: 'capitalize'}}>{client?.address}</TableCell>
                         <TableCell>{client?.email ? client.email : ""}</TableCell>
                         {/* <TableCell>{new Date(client.created_at)}</TableCell> */}
                       </TableRow>

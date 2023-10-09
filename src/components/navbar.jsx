@@ -1,5 +1,5 @@
-import { AppBar, Typography, Toolbar, IconButton, Icon, Box, Badge, Drawer } from "@mui/material"
-import { Menu } from '@mui/icons-material'
+import { AppBar, Typography, Toolbar, IconButton, Icon, Box, Badge, Drawer, Stack } from "@mui/material"
+import { Delete, Menu } from '@mui/icons-material'
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -44,8 +44,8 @@ export default function Navbar({width}) {
 
         const subscription = supabase.channel('any')
             .on('postgres_changes', {event: '*', schema: 'public', table: 'notification'}, (payload => {
-                getUnreadNotifications()
-                getNotifications()
+                getNotifications() 
+                getUnreadNotifications() 
             }))
             .subscribe();
 
@@ -94,33 +94,31 @@ export default function Navbar({width}) {
                 sx={{padding: '20px 10px'}}
                 > 
                 <Box minWidth={300} padding={2}>
-                    <h2 style={{marginBottom: 10}}>Notification</h2> 
+                    <Stack direction={'row'} justifyContent={'space-between'}>
+                        <h2 style={{marginBottom: 10}}>Notification</h2> 
+                        <button
+                            className="delete"
+                            onClick={async () => {
+                                const { error } = await supabase.from('notification').delete().eq('recipent_id', 'admin')
+                                if(error) return alert(error.message)
+                                setNotifications([])
+                                
+                            }}
+                        >
+                            Delete All
+                        </button>
+                    </Stack>
                     {notifications.length == 0 ?
                         <div>
                             No New Notificaiton
                         </div> :
                         notifications.map((item, i) => { 
                             return (
-                                <Box 
+                                <Stack 
                                     key={i}
-                                    onClick={async() => {
-                                        setIsOpenNotificationDrawer(false)
-                                        await supabase.from('notification').update({
-                                            is_read: true
-                                        }).eq('id', item.id)
-                                        if(item.notification_title.includes('message')){ 
-                                            localStorage.setItem('id', item.sent_by_id)
-                                            localStorage.setItem('name', item.sent_by)  
-                                            if(router.pathname == "/inbox"){
-                                                router.reload()
-                                            }else{
-                                                navigate.push('/inbox')
-                                            }
-                                        }else{
-                                            localStorage.setItem('tab', 1);
-                                            navigate.push('/add-laundry')
-                                        }
-                                    }}
+                                    direction={'row'}
+                                    justifyContent={'space-around'}
+                                    alignItems={'center'}  
                                     sx={{
                                         bgcolor: item.is_read ? '#006667E10' : "#00667E",
                                         padding: 2,
@@ -133,11 +131,54 @@ export default function Navbar({width}) {
                                             color: item.is_read ? "black" : '#00667E',
                                             border: item.is_read ? '' : '1px solid #00667E'
                                         },
-                                        outline: 'none'
+                                        outline: 'none',
+                                        position: 'relative'
                                     }}
+                                    
                                 >
-                                    {String(item.notification_message).substring(0, 30)}...
-                                </Box>
+                                    <Typography
+                                        onClick={async() => {
+                                            setIsOpenNotificationDrawer(false)
+                                            await supabase.from('notification').update({
+                                                is_read: true
+                                            }).eq('sent_by_id', item.sent_by_id)
+                                            if(item.notification_title.includes('message')){ 
+                                                localStorage.setItem('id', item.sent_by_id)
+                                                localStorage.setItem('name', item.sent_by)  
+                                                if(router.pathname == "/inbox"){
+                                                    router.reload()
+                                                }else{
+                                                    navigate.push('/inbox')
+                                                }
+                                            }else{
+                                                localStorage.setItem('tab', 1);
+                                                navigate.push('/add-laundry')
+                                            }
+                                        }}
+                                    >
+                                        {String(item.notification_message).substring(0, 30)}...
+                                    </Typography>
+                                    <IconButton
+                                        style={{  
+                                            color: '#ff000'
+                                        }}  
+                                        onClick={async() => {
+                                            await supabase.from('notification').delete().eq('id', item.id);
+                                            setNotifications(prev => prev.filter(i => i.id != item.id))
+                                        }}
+                                    >
+                                        <Delete 
+                                            color="#FF0000"
+                                            htmlColor="#00000080"
+                                            
+                                            sx={{
+                                                "&:hover": {
+                                                    color: "#FF0000"
+                                                }
+                                            }}
+                                        />
+                                    </IconButton>
+                                </Stack>
                             )
                         })
                     } 

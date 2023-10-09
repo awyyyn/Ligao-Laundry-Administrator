@@ -63,7 +63,7 @@ export default function Records() {
                                             <TableRow key={record.id}>
                                                 <TableCell>{record.name}</TableCell>
                                                 <TableCell>{record.service_type}</TableCell>
-                                                <TableCell>{record.phone}</TableCell>
+                                                <TableCell>+63{record.phone}</TableCell>
                                                 <TableCell>{record.price}</TableCell>
                                                 <TableCell>{record.kg ? record.kg : 'N/A'}</TableCell>
                                                 <TableCell>{record.date}</TableCell>

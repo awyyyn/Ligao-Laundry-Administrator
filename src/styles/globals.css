@@ -163,3 +163,39 @@ body{
 .forgot-password:hover{
     color: #00667E;
 }
+
+#showPassLabel{
+    color: #00667EBC;
+    cursor: pointer;
+}
+
+#showPassLabel:hover {
+    color: #00667E;
+}
+
+#showPassLabel:active {
+    color: #00262e
+}
+
+input[type="checkbox"] {
+    accent-color: #00667E;
+}
+
+.delete {
+    outline: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    scale: 1;
+    font-weight: 400; 
+    transition: all  0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.delete:hover {
+    scale: 1.1;
+    font-weight: 700; 
+    color: #d10909; 
+    text-decoration: underline;
+    text-decoration-color: #d10909;
+    transition: all  0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+}

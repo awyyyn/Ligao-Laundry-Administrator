@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { supabase } from "@/supabase";
 import { useRouter } from "next/router";  
 import theme, { PrimaryBTN } from "@/customization";
-import { Box, Button, Backdrop as BackD, Fade, Modal, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Backdrop as BackD, Fade, Modal, Stack, TextField, Typography, InputAdornment, IconButton, FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import Image from "next/image";
 import { Backdrop, CustomHead, Snackbar } from "@/components";
 import { Formik } from "formik";
@@ -11,6 +11,8 @@ import * as yup from 'yup';
 import Head from "next/head"; 
 import { useDispatch } from "react-redux";
 import { toggleSnackBar } from "@/slices/uxSlice";
+import { LoadingButton } from "@mui/lab";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function Home () { 
   const router = useRouter();
@@ -20,7 +22,16 @@ export default function Home () {
   const [forgotEmail, setForgotEmail] = useState('')
   const [openModal, setOpenModal] = useState(false);
   const [message, setIsMessage] = useState(false);
+  const [sendingPasswordResetLink, setSendingPasswordResetLink] = useState(false)
   const dispatch = useDispatch();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
   const handleForgotEmail = (e) => setForgotEmail(e?.target.value) 
  
@@ -47,11 +58,13 @@ export default function Home () {
       .min(6, "Password is too short!")
   })
 
-  const closeSnackBar = setTimeout((param1, param2) => dispatch(toggleSnackBar({isOpen: false, message, type: param1, color: param2})), 3000)
+  const closeSnackBar = (param1, param2) => setTimeout(() => dispatch(toggleSnackBar({isOpen: false, message, type: param1, color: param2})), 3000)
 
   const handleClose = () => {
     setIsOpen(false)
   }
+
+
 
   return (  
     <Box
@@ -202,20 +215,35 @@ export default function Home () {
                     <Stack direction={'column'} spacing={1}>
                       <TextField 
                         label="Password" 
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         error={errors.password  && true}
                         onChange={handleChange('password')}  
                         onBlur={handleBlur('password')}
                         helperText={errors.password && errors.password}  
                         name="password"
                         value={values.password}
+                        
                       /> 
-                      <button 
-                        onClick={() => setOpenModal(true)}
-                        className="forgot-password"
-                      >
-                        Forgot Password?
-                      </button>
+                      <Stack justifyContent='space-between' direction='row'>
+                        <Stack direction='row' spacing={2}>
+                          <input 
+                            type="checkbox" 
+                            checked={showPassword} 
+                            onChange={handleClickShowPassword}
+                            id="showPassword"
+                          />
+                          <label htmlFor="showPassword" id="showPassLabel">
+                            Show Password
+                          </label>
+                        </Stack>
+ 
+                        <button 
+                          onClick={() => setOpenModal(true)}
+                          className="forgot-password"
+                        >
+                          Forgot Password?
+                        </button>
+                      </Stack>
                     </Stack>
                     <PrimaryBTN size="large"  onClick={handleSubmit} disabled={isLoading}>
                       {isLoading ? 'Signing in...' : 'Signin'}
@@ -228,8 +256,7 @@ export default function Home () {
         </Box>
       </Box>
       {/* =========================== MODAL ============================ */}
-      <Modal
-
+      <Modal 
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         open={openModal}
@@ -258,21 +285,47 @@ export default function Home () {
               sx={{mt: 3}}
               placeholder="your_email@gmail.com"
             />
-            <Button
+            <LoadingButton
+              loading={sendingPasswordResetLink}
+              loadingIndicator="Sending Link..."
               variant="contained"
               fullWidth
               sx={{my: 3}}
+              
               onClick={async() => {
-                const { error, data } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+                
+                setSendingPasswordResetLink(true);
+                const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
                   redirectTo: 'https://ligao-laundry.vercel.app/resetpassword'
                 })
-                if(error) {
-                  
+                if(error) {   
+                  dispatch(toggleSnackBar({
+                    isOpen: true,
+                    message: error.message,
+                    type: "error",
+                    color: "#FF0000"
+                  }))
+                  setIsMessage(error.message)
+                  setSendingPasswordResetLink(false);
+                  closeSnackBar("error", "#FF0000")
+                  return 
                 }
+                
+                dispatch(toggleSnackBar({
+                  isOpen: true,
+                  message: "Reset Password Link Sent!",
+                  type: "success",  
+                }))
+                setIsMessage("Reset Password Link Sent!")
+                setSendingPasswordResetLink(false);
+                closeSnackBar("success")
+                setOpenModal(false)
+                setForgotEmail("")
               }}
+              
             >
               Reset Password
-            </Button>
+            </LoadingButton>
           </Box>
         </Fade>
       </Modal>
