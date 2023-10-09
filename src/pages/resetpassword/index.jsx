@@ -35,10 +35,9 @@ export default function ResetPassword() {
             if (event == "PASSWORD_RECOVERY") {
             const newPassword = prompt("What would you like your new password to be?");
             const { data, error } = await supabase.auth
-                .updateUser({ password: newPassword })
-
-                if (data) alert("Password updated successfully!")
-                if (error) alert("There was an error updating your password.")
+                .updateUser({ password: newPassword }) 
+                // if (data) alert("Password updated successfully!")
+                // if (error) alert("There was an error updating your password.")
             }
         })
     }, []);
