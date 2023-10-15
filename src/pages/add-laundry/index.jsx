@@ -190,6 +190,7 @@ export default function Index() {
                             </Tabs>
                             {tab == 1 && 
                                 <TextField 
+                                    size='small' 
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
                                     placeholder="Search" variant="outlined"

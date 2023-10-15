@@ -115,7 +115,8 @@ export default function Index() {
                             <Tab label="Walkin Laundries" value={'0'} />
                             <Tab label="Booked Laundries" value={'1'} />
                         </Tabs> 
-                        <TextField 
+                        <TextField  
+                            size='small' 
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                             placeholder="Search" variant="outlined"
