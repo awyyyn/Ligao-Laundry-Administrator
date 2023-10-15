@@ -1,6 +1,6 @@
 import { Drawer, ListItem as ListI, ListItemText, Typography, Divider, Tooltip, ListItemIcon, ListItemButton, ListSubheader, List, Box } from "@mui/material"
 import Image from "next/image"
-import { CheckBox, CheckBoxTwoTone, Checklist, ChevronLeft, Dashboard, FolderCopy, Inbox, LocalLaundryService, Logout } from "@mui/icons-material";
+import { CheckBox, CheckBoxTwoTone, Checklist, ChevronLeft, Dashboard, FolderCopy, Group, Inbox, LocalLaundryService, Logout } from "@mui/icons-material";
 import { useRouter } from "next/router";
 import theme from "@/customization";
 import styled from "@emotion/styled";
@@ -56,6 +56,11 @@ const DrawerComponent = ({width, variant, display}) => {
             name: "Records",
             path: '/records',
             icon: <FolderCopy />
+        }, 
+        {
+            name: "Customers",
+            path: '/customers',
+            icon: <Group />
         }
     ]
     return (

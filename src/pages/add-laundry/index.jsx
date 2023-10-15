@@ -20,7 +20,9 @@ export default function Index() {
     const [confirmModal, setConfirmModal] = useState(false);
     const [confirmData, setConfirmData] = useState();
     const [loadingBTN, setLoadingBTN] = useState(false);
- 
+    const [search, setSearch] = useState('');
+    const [filtered, setFiltered] = useState([])
+
     const [tab, setTabs] = useState('0');
     const [submitting, setIsSubmitting] = useState(false);
     const [name, setName] = useState('');
@@ -31,7 +33,7 @@ export default function Index() {
         tempPrice: 0,
         price: 0
     });
-    const [bookedLaundries, setBookedLaundries] = useState(); 
+    const [bookedLaundries, setBookedLaundries] = useState([]); 
     const [bookedLaundriesLength, setBookedLaundriesLength] = useState(0);
     const [err, setErr] = useState({
         nameErr: '',
@@ -53,6 +55,7 @@ export default function Index() {
         console.log(data?.length);
         setBookedLaundriesLength(data.length)
         setBookedLaundries(data);
+        setFiltered(data)
     }
 
     /* REALTIME UPDATE */
@@ -75,6 +78,12 @@ export default function Index() {
         }
     }, [])
   
+    useEffect(() => {
+ 
+        setFiltered(bookedLaundries.filter(book => String(book?.name).toLowerCase().includes(String(search).toLowerCase()) ));
+
+    }, [search])
+
 
     /* FORM VALIDATION */
     const validation = () => {
@@ -165,12 +174,29 @@ export default function Index() {
                 <Snackbar />
                 <Grid item xs={12} sx={{padding: {xs: 2, sm: 2}, width: '100%'}}> 
                     <TabContext value={tab}>
-                        <Tabs value={tab} onChange={(e, index) => { 
-                            setTabs(index)
-                        }} sx={{width: '100%'}} >
-                            <Tab label="Add Laundry" value={'0'} />
-                            <Tab label="Booked Laundry" value={'1'} />
-                        </Tabs>
+                        <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            flexWrap="wrap"
+                        >
+                            <Tabs 
+                                value={tab} 
+                                onChange={(e, index) => { 
+                                    setTabs(index)
+                                }}  
+                            >
+                                <Tab label="Add Laundry" value={'0'} />
+                                <Tab label="Booked Laundry" value={'1'} />
+                            </Tabs>
+                            {tab == 1 && 
+                                <TextField 
+                                    value={search}
+                                    onChange={(e) => setSearch(e.target.value)}
+                                    placeholder="Search" variant="outlined"
+                                />
+                            }
+                        </Stack>
+                        
                         <Divider />
                         <TabPanel value={'0'} sx={{width: 'inherit'}}>
                             <form style={{width: '100%',}} onSubmit={handleSubmit} >
@@ -353,7 +379,7 @@ export default function Index() {
                                                     </TableCell>
                                                 </TableRow>
                                             ) : ( 
-                                                bookedLaundries?.map(laundry => {
+                                                filtered?.map(laundry => {
                                                     return (
                                                         <TableRow key={laundry.id}> 
                                                             <TableCell>{laundry.name}</TableCell>

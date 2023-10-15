@@ -17,6 +17,7 @@ export default function Snackbar() {
             // style={{}}
             anchorOrigin={{vertical: 'top', horizontal: 'right'}}
             autoHideDuration={3000} 
+            
         >
             <Alert sx={{backgroundColor: snackbar.color }} severity={snackbar.type} variant="filled"> 
                 {snackbar.message}

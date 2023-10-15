@@ -1,4 +1,4 @@
-import { Box, Divider, Grid, Paper, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs } from "@mui/material";
+import { Box, Divider, Grid, Paper, Stack, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tabs, TextField } from "@mui/material";
 import LayoutAdmin from "../layouts/adminlayout";
 import { TabContext, TabPanel } from "@mui/lab";
 import { useEffect, useState } from "react";
@@ -22,6 +22,10 @@ export default function Index() {
         data: []
     });
 
+    const [filteredWalkin, setFilteredWalkin] = useState([])
+    const [filteredBooked, setFilteredBooked] = useState([])
+    const [search, setSearch] = useState("")
+
     const walkInLaundries = async() => {
         const { data, error } = await supabase.from("laundries_table")
             .select()
@@ -32,15 +36,32 @@ export default function Index() {
                 length: data && data.length
             }));
             setWalkinLoading(false);
+            setFilteredWalkin(data)
     } 
 
     const bookedLaundries = async() => {
         const { data, error } = await supabase.from("laundries_table")
             .select()
             .or('and(user_id.neq.walkin,status.eq.washing)')
+
+            if(error) {
+                alert(error.message)
+                console.log(error)
+                return 
+            }
         setBookedData((prevData) => ({data, length: data && data.length}));
+        setFilteredBooked(data)
     }
-   
+
+    useEffect(() => {
+
+        if(tab == 0){
+            setFilteredWalkin(walkinData.data.filter(book => String(book?.name).toLowerCase().includes(String(search).toLowerCase()) || String(book?.service_type).includes(String(search).toLowerCase())));
+        }else{
+            setFilteredBooked(bookedData.data.filter(book => String(book?.name).toLowerCase().includes(String(search).toLowerCase()) || String(book?.service_type).includes(String(search).toLowerCase())));
+        }
+
+    }, [search])
 
     useEffect(() => {
         walkInLaundries();
@@ -85,10 +106,21 @@ export default function Index() {
                     }}
                 />
                 <TabContext value={tab}>
-                    <Tabs value={tab} onChange={(e, index) => setTab(index)}  >
-                        <Tab label="Walkin Laundries" value={'0'} />
-                        <Tab label="Booked Laundries" value={'1'} />
-                    </Tabs> 
+                    <Stack
+                        direction="row"
+                        justifyContent="space-between"
+                        flexWrap="wrap"
+                    >
+                        <Tabs value={tab} onChange={(e, index) => setTab(index)}  >
+                            <Tab label="Walkin Laundries" value={'0'} />
+                            <Tab label="Booked Laundries" value={'1'} />
+                        </Tabs> 
+                        <TextField 
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            placeholder="Search" variant="outlined"
+                        />
+                    </Stack>
                     <Divider />
                     <TabPanel value={'0'}>
                         <TableContainer component={Paper} >
@@ -114,7 +146,7 @@ export default function Index() {
                                                     <TableCell colSpan={5} sx={{textAlign: 'center'}}>No Laundry</TableCell>
                                                 </TableRow>
                                             ) : (
-                                                walkinData.data.map(laundry => (
+                                                filteredWalkin?.map(laundry => (
                                                     <TableRow key={laundry.id}>
                                                         <TableCell style={{textTransform: 'capitalize'}}>{laundry.name}</TableCell>
                                                         <TableCell>{laundry.service_type}</TableCell>
@@ -157,7 +189,7 @@ export default function Index() {
                                                 <TableCell colSpan={5} sx={{textAlign: 'center'}}>No Laundry</TableCell>
                                         </TableRow>
                                     ) : (
-                                        bookedData.data.map(laundry => (
+                                        filteredBooked?.map(laundry => (
                                             <TableRow key={laundry.id}>
                                                 <TableCell style={{textTransform: 'capitalize'}}>{laundry.name}</TableCell>
                                                 <TableCell>{laundry.service_type}</TableCell>

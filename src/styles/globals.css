@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 
+
+html { 
+    scroll-behavior: smooth;
+}
+
 ::-webkit-scrollbar {
     position: absolute;
     background-color: white;

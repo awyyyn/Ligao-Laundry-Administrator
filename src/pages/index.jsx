@@ -10,6 +10,7 @@ import Footer from '@/components/Footer';
 import GroupIcon from '@mui/icons-material/Group';
 import LocalLaundryServiceIcon from '@mui/icons-material/LocalLaundryService';
 import { supabase } from '@/supabase';
+import Link from 'next/link';
 
 export default function HomePage() {
   const router = useRouter();
@@ -39,7 +40,7 @@ export default function HomePage() {
       allLaundries: clients.length,
       doneLaundries: doneData,
       pending: pendingData,
-      clients: data
+      clients: data?.slice(0, 5)
     }));
     setLoading(false);
   }
@@ -72,10 +73,12 @@ export default function HomePage() {
           <Typography sx={{mt: 3, textAlign: 'justify', lineHeight: '30px', wordSpacing: '10px', fontSize: {xs: '17px', md: '20px', lg: '25px'}, whiteSpace: 'normal', textIndent: '1.5em'}} color={'white'}>
             Welcome to Ligao Laundry, your trusted destination for impeccable cleanliness. Our cutting-edge technology, eco-friendly practices, and expert staff ensure your garments receive the utmost care. Experience convenience, efficiency, and unmatched quality as we redefine the way you think about laundry.
           </Typography>
-          <Button onClick={() => router.push('/add-laundry')} variant='outlined' sx={{mt: 3, color: 'white',  border: '1px solid white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
+          <Link href='#customers-container'>
+            <Button /* onClick={() => router.push('/add-laundry')} */ variant='outlined' sx={{mt: 3, color: 'white',  border: '1px solid white', '&:hover': { border: '1px solid white'}}} >Continue...</Button>
+          </Link>
         </div>
       </Box> 
-      <Box style={{ minHeight: '600px'}} paddingY={10} rowGap={10}>
+      <Box id="customers-container" style={{ minHeight: '600px'}} paddingY={10} rowGap={10}>
         <Grid container justifyContent='space-around' rowSpacing={5}>
           <Grid item xs={10} sm={5} md={3}>
             <Paper elevation={5} style={{padding: 15}}>
@@ -140,7 +143,14 @@ export default function HomePage() {
         </Grid>
         
         <Box  paddingX={{xs: 3, md: 6}} mt={5}>
-          <Typography sx={{marginBottom: 3, marginTop: 5}} variant="h3">Customers</Typography>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            alignItems="center"
+          >
+            <Typography sx={{marginBottom: 3, marginTop: 5}} variant="h4">Customers</Typography>
+            <Typography variant='h5' sx={{"&:hover": {textDecoration: "underline", cursor: "pointer"}}} onClick={() => router.push('/customers')}>See all</Typography>
+          </Stack>
           <Paper overflow="hidden">
             <TableContainer sx={{maxHeight: 500}}>
               <Table stickyHeader>
