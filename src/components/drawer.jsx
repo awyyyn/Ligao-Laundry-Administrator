@@ -1,4 +1,4 @@
-import { Drawer, ListItem as ListI, ListItemText, Typography, Divider, Tooltip, ListItemIcon, ListItemButton, ListSubheader, List, Box } from "@mui/material"
+import { Drawer, ListItem as ListI, ListItemText, Typography, Divider, Tooltip, ListItemIcon, ListItemButton, ListSubheader, List, Box, SvgIcon } from "@mui/material"
 import Image from "next/image"
 import { CheckBox, CheckBoxTwoTone, Checklist, ChevronLeft, Dashboard, FolderCopy, Group, Inbox, LocalLaundryService, Logout } from "@mui/icons-material";
 import { useRouter } from "next/router";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeDrawer } from "../slices/uxSlice.js";
 import Link from "next/link";
 import { supabase } from "@/supabase/index.js";
+import { GiCardPickup } from "react-icons/gi"
 
 const DrawerComponent = ({width, variant, display}) => {
     const router = useRouter();
@@ -51,6 +52,11 @@ const DrawerComponent = ({width, variant, display}) => {
             name: "Laundries",
             path: '/laundries',
             icon: <Checklist />
+        }, 
+        {
+            name: "To Pick Up",
+            path: '/to-pick-up',
+            icon: <GiCardPickup />
         },
         {
             name: "Records",

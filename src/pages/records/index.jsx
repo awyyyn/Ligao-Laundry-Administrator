@@ -13,7 +13,7 @@ export default function Records() {
 
     async function getRecords() {
         setIsLoading(true);
-        const { data } = await supabase.from('laundries_table').select().eq('status', 'done');
+        const { data } = await supabase.from('laundries_table').select().eq('status', '');
         setIsLoading(false);
         setRecords(data)
     }
@@ -25,8 +25,7 @@ export default function Records() {
     }, []); 
     const titleCell = ['Name', 'Type of Service', 'Phone', 'Price', 'Kg', 'Date'];
 
-     
-
+      
     return ( 
         <LayoutAdmin> 
             <Grid container height='100%' width={{xs: '100vw', sm: 'calc(100vw - 250px)'}} position='relative' > 
