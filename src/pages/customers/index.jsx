@@ -36,22 +36,22 @@ export default function Customers() {
     // console.log(customer)
 
   
-    useEffect(() => {
-        const getInitData = async () => {
-        
-            const { data, count, error } = await supabase.from('customers').select().neq('is_block', true);  
-            // console.log(data)
+    const getInitData = async () => {
     
-            if(error) {
-                setInitLoading(false)
-                return alert(error.message);
-            }
-            
-            setCustomers(data)
+        const { data, count, error } = await supabase.from('customers').select().neq('is_block', true);  
+        // console.log(data)
+
+        if(error) {
             setInitLoading(false)
-            setFiltered(data)
-    
+            return alert(error.message);
         }
+        
+        setCustomers(data)
+        setInitLoading(false)
+        setFiltered(data)
+
+    }
+    useEffect(() => {
 
         
         getInitData();
@@ -112,7 +112,7 @@ export default function Customers() {
                                             }}>Actions</TableCell>  
                                         <TableCell 
                                             className="table-header">
-                                            
+                                            Block
                                         </TableCell>
                                     </TableRow> 
                                 </TableHead>
@@ -369,6 +369,7 @@ export default function Customers() {
                                             type: "success",
                                             color: "#00667E"
                                         }))
+                                        setToBlockModal(false)
                                         setTimeout(() => {
                                             dispatch(toggleSnackBar({
                                                 isOpen: false,
