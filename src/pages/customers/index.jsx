@@ -56,11 +56,12 @@ export default function Customers() {
         
         getInitData();
 
-        const subscription = supabase.channel('any').on('postgres_changes', { event: "*", schema: "public", table: "customers"}, p => {
+        const subscription = supabase.channel('any').on('postgres_changes', { event: '*', schema: 'public', table: 'customers'}, p => {
             getInitData()
+            console.log("HELLO WORLD")
         }).subscribe();
 
-        return ()  => subscription.unsubscribe()
+        return ()  => supabase.removeChannel(subscription)
 
 
     }, []);
@@ -361,6 +362,9 @@ export default function Customers() {
                                             return 
                                         }
 
+                                        setFiltered(prev => prev.filter(cu => cu.is_block == false))
+                                        setCustomers(prev => prev.filter(cu => cu.is_block == false))
+                                        
                                         
                                         setBlocking(false)
                                         dispatch(toggleSnackBar({

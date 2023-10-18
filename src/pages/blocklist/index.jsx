@@ -60,7 +60,7 @@ export default function Customers() {
             getData()
         }).subscribe();
 
-        return () => subscription.unsubscribe();
+        return () => supabase.removeChannel(subscription)
 
     }, []);
 
@@ -251,7 +251,7 @@ export default function Customers() {
                                     //     }
                                     // }}
                                     loading={blocking}
-                                    loadingIndicator="Blocking..."
+                                    loadingIndicator="Unblocking..."
                                     color='primary'
                                     onClick={async() => {
                                         setBlocking(true)
