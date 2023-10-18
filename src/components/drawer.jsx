@@ -60,7 +60,7 @@ const DrawerComponent = ({width, variant, display}) => {
             icon: <GiCardPickup />
         },
         {
-            name: "Records",
+            name: "Logs",
             path: '/records',
             icon: <FolderCopy />
         }, 

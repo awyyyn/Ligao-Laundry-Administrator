@@ -9,6 +9,7 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
     const tempPrice = data && data.service_type == "Gown" ? "" : data && data.price
     const [price, setPrice] = useState(0);
     const [kg, setKg] = useState();
+    const [pieces, setPieces] = useState(1);
     const [err, setErr] = useState({
         priceErr: false,
         kgErr: false
@@ -30,7 +31,8 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
             const { data, error } = await supabase.from('laundries_table')
                 .update({
                     price: price,
-                    status: 'washing'
+                    status: 'washing',
+                    pieces
                 })
                 .eq('id', id).select();
             
@@ -51,7 +53,8 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
                 .update({
                     price: price,
                     kg: kg,
-                    status: 'washing'
+                    status: 'washing',
+                    pieces
                 })
                 .eq('id', id).select()
 
@@ -71,6 +74,7 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
         setPrice('')
         setKg('')
         setLoading(false);
+        setPieces(1)
         handleClose();
         setTimeout(() => {
             dispatch(toggleSnackBar({ 
@@ -143,6 +147,13 @@ export default function ConfirmModal({data, isOpen, handleClose}) {
                             /> 
                         )
                     }
+                    <TextField 
+                        label="Pieces"
+                        size='small'
+                        type='number'
+                        value={pieces}
+                        onChange={(e) =>  setPieces(e.target.value)}
+                    />
                     <TextField 
                         label="Price"  
                         value={price}

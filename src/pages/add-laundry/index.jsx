@@ -26,6 +26,7 @@ export default function Index() {
     const [tab, setTabs] = useState('0');
     const [submitting, setIsSubmitting] = useState(false);
     const [name, setName] = useState('');
+    const [pieces, setPieces] = useState(1)
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [type, setType] = useState('');
@@ -121,6 +122,7 @@ export default function Index() {
                 service_type: type, 
                 status: 'washing', 
                 phone, 
+                pieces,
                 price: price.price, 
                 date: date.toLocaleDateString(),
                 user_id: 'walkin'
@@ -315,6 +317,15 @@ export default function Index() {
                                         InputProps={{ 
                                             endAdornment: <InputAdornment position='end'>kg</InputAdornment>
                                         }}
+                                    />
+                                    <TextField 
+                                        fullWidth  
+                                        onChange={(e) => setPieces(e.target.value)}
+                                        value={pieces}
+                                        type='number'
+                                        min={1} 
+                                        inputMode='numeric'
+                                        autoComplete='off'   
                                     />
                                     <LoadingButton 
                                         loading={submitting} 

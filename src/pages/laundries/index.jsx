@@ -131,6 +131,7 @@ export default function Index() {
                                         <TableCell sx={tblHeadStyle}>Name</TableCell>
                                         <TableCell sx={tblHeadStyle}>Service Type</TableCell>
                                         <TableCell sx={tblHeadStyle}>Price</TableCell> 
+                                        <TableCell sx={tblHeadStyle}>Pieces</TableCell> 
                                         <TableCell sx={tblHeadStyle}>Status</TableCell> 
                                         <TableCell sx={tblHeadStyle}>Finish</TableCell> 
                                     </TableRow>
@@ -152,6 +153,7 @@ export default function Index() {
                                                         <TableCell style={{textTransform: 'capitalize'}}>{laundry.name}</TableCell>
                                                         <TableCell>{laundry.service_type}</TableCell>
                                                         <TableCell>₱  {laundry.price}</TableCell> 
+                                                        <TableCell>{laundry?.pieces}</TableCell> 
                                                         <TableCell>{laundry.status}...</TableCell> 
                                                         <TableCell
                                                             onClick={() => {
@@ -179,6 +181,7 @@ export default function Index() {
                                     <TableCell sx={tblHeadStyle}>Name</TableCell>
                                     <TableCell sx={tblHeadStyle}>Service Type</TableCell>
                                     <TableCell sx={tblHeadStyle}>Price</TableCell> 
+                                    <TableCell sx={tblHeadStyle}>Pieces</TableCell> 
                                     <TableCell sx={tblHeadStyle}>Status</TableCell> 
                                     <TableCell sx={tblHeadStyle}>Finish</TableCell> 
                                 </TableRow>
@@ -195,6 +198,7 @@ export default function Index() {
                                                 <TableCell style={{textTransform: 'capitalize'}}>{laundry.name}</TableCell>
                                                 <TableCell>{laundry.service_type}</TableCell>
                                                 <TableCell>₱  {laundry.price}</TableCell> 
+                                                <TableCell>{laundry.pieces}</TableCell> 
                                                 <TableCell>{laundry.status}...</TableCell> 
                                                 <TableCell 
                                                     sx={{cursor: 'pointer'}}
