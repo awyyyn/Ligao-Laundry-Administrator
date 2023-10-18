@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { closeDrawer } from "../slices/uxSlice.js";
 import Link from "next/link";
 import { supabase } from "@/supabase/index.js";
-import { GiCardPickup } from "react-icons/gi"
+import { GiCardPickup } from "react-icons/gi";
+import { TbUserX } from 'react-icons/tb'
 
 const DrawerComponent = ({width, variant, display}) => {
     const router = useRouter();
@@ -67,6 +68,11 @@ const DrawerComponent = ({width, variant, display}) => {
             name: "Customers",
             path: '/customers',
             icon: <Group />
+        },
+        {
+            name: "Blocked list",
+            path: '/blocklist',
+            icon: <TbUserX scale={3} />
         }
     ]
     return (

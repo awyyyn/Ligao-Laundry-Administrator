@@ -27,14 +27,14 @@ export default function Navbar({width}) {
             console.log(error)
             return 
         }
-        console.log(data.length)
-        setNotifications(data.reverse())
+        console.log(data?.length)
+        setNotifications(data?.reverse())
         console.log("NOTIFICATIOn", data)
     }
 
     async function getUnreadNotifications() {
         const { data } = await supabase.from('notification').select().match({is_read: false, recipent_id: 'admin'}); 
-        setUnreadNotification(data.length)
+        setUnreadNotification(data?.length)
     }
 
     useEffect(() => {
@@ -74,7 +74,7 @@ export default function Navbar({width}) {
                             color="error"
                             badgeContent={unreadNotification}
                         >
-                            <NotificationsIcon    />
+                            <NotificationsIcon     />
                         </Badge>
                     </IconButton>
                     {/* <IconButton   style={{color: '#FFFFFF'}} >
